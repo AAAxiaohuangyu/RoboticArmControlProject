@@ -36,6 +36,8 @@ roboticarmcontrolproject\dmj4310_motor_driver.o: ../Drivers/STM32H7xx_HAL_Driver
 roboticarmcontrolproject\dmj4310_motor_driver.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h
 roboticarmcontrolproject\dmj4310_motor_driver.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 roboticarmcontrolproject\dmj4310_motor_driver.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
+roboticarmcontrolproject\dmj4310_motor_driver.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
+roboticarmcontrolproject\dmj4310_motor_driver.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 roboticarmcontrolproject\dmj4310_motor_driver.o: ../RoboticArmControlSDK/Config/Robotic_Arm_Config.h
-roboticarmcontrolproject\dmj4310_motor_driver.o: ../RoboticArmControlSDK/Port/Robotic_Arm_HAL_STM32_Port.h
+roboticarmcontrolproject\dmj4310_motor_driver.o: ../RoboticArmControlSDK/Port/Robotic_Arm_Motor_HAL_STM32_Port.h
 roboticarmcontrolproject\dmj4310_motor_driver.o: ../Core/Inc/fdcan.h

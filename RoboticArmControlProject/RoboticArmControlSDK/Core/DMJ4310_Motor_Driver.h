@@ -3,7 +3,7 @@
 
 #include "main.h"
 #include "Robotic_Arm_Config.h"
-#include "Robotic_Arm_HAL_STM32_Port.h"
+#include "Robotic_Arm_Motor_HAL_STM32_Port.h"
 #include "fdcan.h"
 
 #define DMJ4310_Motor_FDCAN_Length 8
@@ -23,6 +23,7 @@
 #define DMJ4310_Motor_Torque_Min -18.0f
 #define DMJ4310_Motor_Torque_Length 12 // 单位为位
 #define DMJ4310_Motor_FDCAN_Response_ID 0
+#define DMJ4310_Motor_Control_Cycle 5 // 控制周期,单位为ms
 
 extern DMJ4310_Motor_Handle_t DMJ4310_Motor_Handle[];
 
