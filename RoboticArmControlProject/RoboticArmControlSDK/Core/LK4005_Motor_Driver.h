@@ -10,7 +10,7 @@
 #define Reduction_Ratio 10.0f
 #define Position_Conversion_Ratio 0.01f
 #define Torque_Conversion_Ratio 62.0606f
-#define LK4005_Motor_Control_Cycle 3 //控制周期(不计算等待FDCAN的2ms),单位为ms
+#define LK4005_Motor_Control_Cycle 1 //控制周期(不计算等待FDCAN的4ms),单位为ms
 
 extern LK4005_Motor_Handle_t LK4005_Motor_Handle[];
 
@@ -18,6 +18,7 @@ void LK4005_Motor_Control_Init(void);
 void LK4005_Motor_Torque_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle);
 void LK4005_Motor_Position_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle);
 void LK4005_Motor_Read_Position(LK4005_Motor_Handle_t LK4005_Motor_Handle);
+void LK4005_Motor_Read_Velocity(LK4005_Motor_Handle_t LK4005_Motor_Handle);
 void LK4005_Motor_Response_Data_Explain(FDCAN_HandleTypeDef *hfdcan, FDCAN_RxHeaderTypeDef FDCAN_Rx_Head_Temp, uint8_t *FDCAN_Rx_Data_Temp, LK4005_Motor_Handle_t *LK4005_Motor_Handle);
 
 #endif

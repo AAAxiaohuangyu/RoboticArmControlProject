@@ -41,3 +41,4 @@ roboticarmcontrolproject\dmj4310_motor_driver.o: ../Drivers/STM32H7xx_HAL_Driver
 roboticarmcontrolproject\dmj4310_motor_driver.o: ../RoboticArmControlSDK/Config/Robotic_Arm_Config.h
 roboticarmcontrolproject\dmj4310_motor_driver.o: ../RoboticArmControlSDK/Port/Robotic_Arm_Motor_HAL_STM32_Port.h
 roboticarmcontrolproject\dmj4310_motor_driver.o: ../Core/Inc/fdcan.h
+roboticarmcontrolproject\dmj4310_motor_driver.o: ..\RoboticArmControlSDK\Core\Control_Algorithm.h

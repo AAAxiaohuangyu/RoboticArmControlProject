@@ -1,6 +1,6 @@
 #include "LFD01M_Motor_Driver.h"
 
-LFD01M_Motor_Handle_t LFD01M_Motor_Handle[LFD01M_Motor_Number];
+LFD01M_Motor_Handle_t LFD01M_Motor_Handle[LFD01M_Motor_Number] = {0};
 
 void LFD01M_Motor_Control_Init(void)
 {

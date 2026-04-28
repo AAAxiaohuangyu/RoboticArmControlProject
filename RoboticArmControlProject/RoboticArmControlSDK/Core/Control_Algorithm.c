@@ -17,3 +17,140 @@ float Forearm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Mot
 {
     return (Robotic_Arm_Mass_L2 * Robotic_Arm_Length_L2 * 0.5f + Robotic_Arm_Mass_End * Robotic_Arm_Length_L2) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle + Forearm_Motor_Angle);
 }
+
+float Normalize_Rad(float Angle_Rad)
+{
+    float x = fmodf(Angle_Rad, 2.0f * PI);
+    if (x < 0)
+    {
+        x += 2.0f * PI;
+    }
+    return x;
+}
+
+void Speed_Plan_Update(Speed_Plan_Handle_t *Speed_Plan_Handle, float position_actual, float position_target)
+{
+    uint32_t Current_Time = HAL_GetTick();
+    float dt = (Current_Time - Speed_Plan_Handle->Time_Stamp) * 0.001f;
+
+    switch (Speed_Plan_Handle->Speed_Plan_State)
+    {
+    case idle:
+    {
+        Speed_Plan_Handle->a = 0;
+        Speed_Plan_Handle->v = 0;
+        Speed_Plan_Handle->s = 0;
+        break;
+    }
+    case init:
+    {
+        Speed_Plan_Handle->error_s = position_target - position_actual;
+        Speed_Plan_Handle->position_initial = position_actual;
+
+        if (Speed_Plan_Handle->error_s >= 0.0f)
+        {
+            Speed_Plan_Handle->direction_flag = 1.0f;
+        }
+        else
+        {
+            Speed_Plan_Handle->direction_flag = -1.0f;
+        }
+        Speed_Plan_Handle->Speed_Plan_State = phase1;
+        break;
+    }
+    case phase1:
+    {
+        Speed_Plan_Handle->a += Speed_Plan_Handle->j * dt;
+        Speed_Plan_Handle->v += Speed_Plan_Handle->a * dt;
+        Speed_Plan_Handle->s += Speed_Plan_Handle->v * dt;
+
+        if (Speed_Plan_Handle->a >= Speed_Plan_Handle->a_max)
+        {
+            Speed_Plan_Handle->a = Speed_Plan_Handle->a_max;
+            Speed_Plan_Handle->s1 = Speed_Plan_Handle->s;
+            Speed_Plan_Handle->v1 = Speed_Plan_Handle->v;
+            Speed_Plan_Handle->Speed_Plan_State = phase2;
+        }
+        break;
+    }
+    case phase2:
+    {
+        Speed_Plan_Handle->v += Speed_Plan_Handle->a * dt;
+        Speed_Plan_Handle->s += Speed_Plan_Handle->v * dt;
+
+        if (Speed_Plan_Handle->v >= Speed_Plan_Handle->v_max - Speed_Plan_Handle->v1)
+        {
+            Speed_Plan_Handle->s2 = Speed_Plan_Handle->s;
+            Speed_Plan_Handle->Speed_Plan_State = phase3;
+        }
+        break;
+    }
+    case phase3:
+    {
+        Speed_Plan_Handle->a -= Speed_Plan_Handle->j * dt;
+        Speed_Plan_Handle->v += Speed_Plan_Handle->a * dt;
+        Speed_Plan_Handle->s += Speed_Plan_Handle->v * dt;
+
+        if (Speed_Plan_Handle->a <= 0)
+        {
+            Speed_Plan_Handle->a = 0;
+            Speed_Plan_Handle->s_accel_used = Speed_Plan_Handle->s;
+            if (fabsf(Speed_Plan_Handle->error_s) >= powf(Speed_Plan_Handle->v_max, 2.0f) / Speed_Plan_Handle->a_max + Speed_Plan_Handle->a_max * Speed_Plan_Handle->v_max / Speed_Plan_Handle->j)
+            {
+                Speed_Plan_Handle->Speed_Plan_State = phase4;
+            }
+            else
+            {
+                Speed_Plan_Handle->Speed_Plan_State = phase5;
+            }
+        }
+        break;
+    }
+    case phase4:
+    {
+        Speed_Plan_Handle->s += Speed_Plan_Handle->v * dt;
+        if (Speed_Plan_Handle->s >= (fabsf(Speed_Plan_Handle->error_s) - Speed_Plan_Handle->s_accel_used))
+        {
+            Speed_Plan_Handle->Speed_Plan_State = phase5;
+        }
+        break;
+    }
+    case phase5:
+    {
+        Speed_Plan_Handle->a -= Speed_Plan_Handle->j * dt;
+        Speed_Plan_Handle->v += Speed_Plan_Handle->a * dt;
+        Speed_Plan_Handle->s += Speed_Plan_Handle->v * dt;
+
+        if (Speed_Plan_Handle->s >= (fabsf(Speed_Plan_Handle->error_s) - Speed_Plan_Handle->s2))
+        {
+            Speed_Plan_Handle->Speed_Plan_State = phase6;
+        }
+        break;
+    }
+    case phase6:
+    {
+        Speed_Plan_Handle->v += Speed_Plan_Handle->a * dt;
+        Speed_Plan_Handle->s += Speed_Plan_Handle->v * dt;
+
+        if (Speed_Plan_Handle->s >= (fabsf(Speed_Plan_Handle->error_s) - Speed_Plan_Handle->s1))
+        {
+            Speed_Plan_Handle->Speed_Plan_State = phase7;
+        }
+        break;
+    }
+    case phase7:
+    {
+        Speed_Plan_Handle->a += Speed_Plan_Handle->j * dt;
+        Speed_Plan_Handle->v += Speed_Plan_Handle->a * dt;
+        Speed_Plan_Handle->s += Speed_Plan_Handle->v * dt;
+
+        if (Speed_Plan_Handle->v <= 0)
+        {
+            Speed_Plan_Handle->v = 0;
+            Speed_Plan_Handle->Speed_Plan_State = idle;
+        }
+        break;
+    }
+    }
+    Speed_Plan_Handle->Time_Stamp = HAL_GetTick();
+}

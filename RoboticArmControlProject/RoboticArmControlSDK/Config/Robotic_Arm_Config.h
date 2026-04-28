@@ -11,6 +11,40 @@ typedef enum
     Servo, //舵机
 } Motor_Type_t;
 
+typedef enum
+{
+    idle,
+    init,
+    phase1,
+    phase2,
+    phase3,
+    phase4,
+    phase5,
+    phase6,
+    phase7,
+} Speed_Plan_State_type;
+
+typedef struct 
+{
+    uint32_t Time_Stamp;
+    float j;
+    float a;
+    float a_max;
+    float v;
+    float v_max;
+    float error_s;
+    float position_initial;
+    float direction_flag;
+    float s;
+    float s_accel_used;
+    float s2;
+    float s1;
+    float v1;
+    Speed_Plan_State_type Speed_Plan_State;
+
+}Speed_Plan_Handle_t;
+
+
 typedef struct
 {
     float Motor_Position_Actual;    // 单位为rad
@@ -29,7 +63,7 @@ typedef struct
     float Motor_Position_Actual; //范围:0~2pi,单位为rad
     float Motor_Position_Target; // 范围:0~2pi,单位为rad
     int8_t Move_Direction; //0:顺时针,1:逆时针
-} Motor_Position_PID_Control_Handle_t;
+} Motor_Position_PID_Control_Handle_t; //供云台电机使用
 
 typedef struct
 {
@@ -46,7 +80,9 @@ typedef struct
     uint16_t Motor_ID;
     uint8_t Motor_Status;
     float Motor_Torque_Actual;   //单位为N*m
-    Motor_MIT_Control_Handle_t DMJ4310_Motor_MIT_Control;
+    float Motor_Position_Target; //单位为rad
+    Motor_MIT_Control_Handle_t Motor_MIT_Control_Handle;
+    Speed_Plan_Handle_t Motor_Speed_Plan_Handle;
 } DMJ4310_Motor_Handle_t;
 
 typedef struct
@@ -54,8 +90,10 @@ typedef struct
     Motor_Type_t Motor_Type;
     FDCAN_HandleTypeDef *Motor_FDCAN_Handle;
     uint16_t Motor_ID;
-    Motor_MIT_Control_Handle_t LK4005_Motor_MIT_Control; // Position范围:0~2pi,单位为rad,Output范围:-33A~33A,单位为A
+    float Motor_Position_Target;                         // 单位为rad
+    Motor_MIT_Control_Handle_t Motor_MIT_Control_Handle; // Position范围:0~2pi,单位为rad,Output范围:-33A~33A,单位为A
     Motor_Position_PID_Control_Handle_t Motor_Position_PID_Control_Handle;
+    Speed_Plan_Handle_t Motor_Speed_Plan_Handle;
 } LK4005_Motor_Handle_t;
 
 #define PI 3.14159f

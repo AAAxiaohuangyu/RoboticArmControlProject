@@ -10,8 +10,8 @@
 #define DMJ4310_Motor_Position_Max 12.5f
 #define DMJ4310_Motor_Position_Min -12.5f
 #define DMJ4310_Motor_Position_Length 16 //单位为位
-#define DMJ4310_Motor_Velocity_Max 45.0f
-#define DMJ4310_Motor_Velocity_Min -45.0f
+#define DMJ4310_Motor_Velocity_Max 30.0f
+#define DMJ4310_Motor_Velocity_Min -30.0f
 #define DMJ4310_Motor_Velocity_Length 12 // 单位为位
 #define DMJ4310_Motor_MIT_Kp_Max 500.0f
 #define DMJ4310_Motor_MIT_Kp_Min 0.0f
@@ -19,10 +19,10 @@
 #define DMJ4310_Motor_MIT_Kd_Max 5.0f
 #define DMJ4310_Motor_MIT_Kd_Min 0.0f
 #define DMJ4310_Motor_MIT_Kd_Length 12 // 单位为位
-#define DMJ4310_Motor_Torque_Max 18.0f
-#define DMJ4310_Motor_Torque_Min -18.0f
+#define DMJ4310_Motor_Torque_Max 10.0f
+#define DMJ4310_Motor_Torque_Min -10.0f
 #define DMJ4310_Motor_Torque_Length 12 // 单位为位
-#define DMJ4310_Motor_FDCAN_Response_ID 0
+#define DMJ4310_Motor_FDCAN_Response_ID 2
 #define DMJ4310_Motor_Control_Cycle 5 // 控制周期,单位为ms
 
 extern DMJ4310_Motor_Handle_t DMJ4310_Motor_Handle[];
