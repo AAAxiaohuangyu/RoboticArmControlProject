@@ -1,4 +1,9 @@
 #include "Robotic_Arm_Communication_HAL_STM32_Port.h"
+#include "string.h"
+#include "stdio.h"
+#include "LFD01M_Motor_Driver.h"
+#include "LK4005_Motor_Driver.h"
+#include "DMJ4310_Motor_Driver.h"
 
 uint8_t Usart_Used0_Rx_Buff[Usart_Used0_Rx_Buff_Length] = {0};
 
@@ -11,6 +16,44 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
     if (huart->Instance == Communication_Usart_Instance_Used0)
     {
+        Usart_Used0_Rx_Buff[Size] = '\0';
+        char tittle[8] = {0};
+        int subtitle = 0;
+        float temp1 = 0;
+        if (strncmp((char *)Usart_Used0_Rx_Buff, "LFD", 3) == 0)
+        {
+            sscanf((char *)Usart_Used0_Rx_Buff, "%s %d %f", tittle,&subtitle,&temp1);
+
+            if(subtitle == 0)
+            {
+                LFD01M_Motor_Handle[0].Motor_Position = temp1;
+            }
+            else if(subtitle == 1)
+            {
+                LFD01M_Motor_Handle[1].Motor_Position = temp1;
+            }
+        }
+
+        else if (strncmp((char *)Usart_Used0_Rx_Buff, "LK", 2) == 0)
+        {
+            sscanf((char *)Usart_Used0_Rx_Buff, "%s %d %f", tittle, &subtitle, &temp1);
+
+            if (subtitle == 0)
+            {
+                LK4005_Motor_Handle[0].Motor_Position_Target = temp1;
+            }
+            else if (subtitle == 1)
+            {
+                LK4005_Motor_Handle[1].Motor_Position_Target = temp1;
+            }
+        }
+
+        else if (strncmp((char *)Usart_Used0_Rx_Buff, "DM", 2) == 0)
+        {
+            sscanf((char *)Usart_Used0_Rx_Buff, "%s %f", tittle, &temp1);
+            DMJ4310_Motor_Handle[0].Motor_Position_Target = temp1;
+        }
+
         HAL_UARTEx_ReceiveToIdle_DMA(Communication_Usart_Handle_Used0, Usart_Used0_Rx_Buff, Usart_Used0_Rx_Buff_Length);
     }
 }

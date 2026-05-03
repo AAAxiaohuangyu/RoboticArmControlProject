@@ -39,3 +39,12 @@ roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Core/Inc/usart.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: F:\Keil5\ARM\ARMCC\Bin\..\include\string.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: F:\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticArmControlSDK/Core/LFD01M_Motor_Driver.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticArmControlSDK/Config/Robotic_Arm_Config.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Core/Inc/tim.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticArmControlSDK/Core/LK4005_Motor_Driver.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticArmControlSDK/Port/Robotic_Arm_Motor_HAL_STM32_Port.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Core/Inc/fdcan.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticArmControlSDK/Core/DMJ4310_Motor_Driver.h

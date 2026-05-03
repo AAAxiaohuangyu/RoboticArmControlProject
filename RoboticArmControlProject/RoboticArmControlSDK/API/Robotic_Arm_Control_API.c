@@ -98,7 +98,7 @@ void LK4005_Motor_Handle_Update(void)
                 LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
             }
 
-            LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
+            //LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
         }
 
         HAL_Delay(LK4005_Motor_Control_Cycle);
@@ -108,7 +108,7 @@ void LK4005_Motor_Handle_Update(void)
 void Robotic_Arm_Control_Init(void)
 {
     Motor_Control_Init();
-    HAL_Delay(10);
+    HAL_Delay(2000);
     uint8_t i = 0;
     for (i = 0; i < DMJ4310_Motor_Number;i++)
     {

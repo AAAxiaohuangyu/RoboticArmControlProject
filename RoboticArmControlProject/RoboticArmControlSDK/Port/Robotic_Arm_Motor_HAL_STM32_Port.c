@@ -9,6 +9,7 @@ void Motor_Control_Init(void)
     DMJ4310_Motor_Control_Init();
     LK4005_Motor_Control_Init();
     HAL_FDCAN_Start(&hfdcan1);
+    HAL_FDCAN_Start(&hfdcan2);
 }
 
 void FDCAN_Send_Standard(FDCAN_HandleTypeDef *FDCAN_Handle, uint16_t std_id, uint8_t *data, uint8_t length)

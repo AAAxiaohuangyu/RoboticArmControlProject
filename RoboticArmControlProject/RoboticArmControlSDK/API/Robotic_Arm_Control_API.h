@@ -11,4 +11,8 @@ void Robotic_Arm_Control_Init(void);
 void Robotic_Arm_Control(void);
 void Robotic_Arm_Communication(void);
 
+void LFD01M_Motor_Handle_Update(void);
+void DMJ4310_Motor_Handle_Update(void);
+void LK4005_Motor_Handle_Update(void);
+
 #endif

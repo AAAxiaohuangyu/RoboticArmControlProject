@@ -1,7 +1,7 @@
 #include "LK4005_Motor_Driver.h"
 #include "Control_Algorithm.h"
 
-LK4005_Motor_Handle_t LK4005_Motor_Handle[LK4005_Motor_Number] ={0};
+LK4005_Motor_Handle_t LK4005_Motor_Handle[LK4005_Motor_Number] = {0};
 
 void LK4005_Motor_Control_Init(void)
 {
@@ -9,22 +9,31 @@ void LK4005_Motor_Control_Init(void)
     LK4005_Motor_Handle[0].Motor_ID = 0x14C;
     LK4005_Motor_Handle[0].Motor_Type = Gimbal;
     LK4005_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = idle;
-    LK4005_Motor_Handle[1].Motor_FDCAN_Handle = &hfdcan1;
+
+    LK4005_Motor_Handle[1].Motor_FDCAN_Handle = &hfdcan2;
     LK4005_Motor_Handle[1].Motor_ID = 0x149;
     LK4005_Motor_Handle[1].Motor_Type = Joint_Fore;
-    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle.MIT_Kp = 27.8f;
-    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle.MIT_Kd = 0.68f;
+    LK4005_Motor_Handle[1].Motor_Position_Target = 1.05f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle.MIT_Kp0 = 55.48f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle.MIT_Kp1 = 40.48f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle.MIT_Kd0 = 0.3f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle.MIT_Kd1 = 0.21f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle.Motor_Torque_Friction = 0.09f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle.Mode_Threshold = 0.0523f;
     LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State = idle;
 
     FDCAN_FilterTypeDef sfilter = {0};
     sfilter.IdType = FDCAN_STANDARD_ID;
     sfilter.FilterIndex = 1;
     sfilter.FilterType = FDCAN_FILTER_RANGE;
-    sfilter.FilterConfig = FDCAN_RX_FIFO1;
+    sfilter.FilterConfig = FDCAN_FILTER_TO_RXFIFO1;
     sfilter.FilterID1 = 0x140;
     sfilter.FilterID2 = 0x14F;
-    HAL_FDCAN_ConfigFilter(&hfdcan1, &sfilter);
-    HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
+    HAL_FDCAN_ConfigFilter(LK4005_Motor_Handle[0].Motor_FDCAN_Handle, &sfilter);
+    HAL_FDCAN_ConfigFilter(LK4005_Motor_Handle[1].Motor_FDCAN_Handle, &sfilter);
+
+    HAL_FDCAN_ActivateNotification(LK4005_Motor_Handle[0].Motor_FDCAN_Handle, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
+    HAL_FDCAN_ActivateNotification(LK4005_Motor_Handle[1].Motor_FDCAN_Handle, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
 }
 
 void LK4005_Motor_Torque_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle)
@@ -48,13 +57,13 @@ void LK4005_Motor_Torque_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle)
 void LK4005_Motor_Position_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle)
 {
     uint8_t FDCAN_Send_Temp[LK4005_Motor_FDCAN_Length] = {0};
-    uint32_t Position_Temp = (uint32_t)(LK4005_Motor_Handle.Motor_Position_PID_Control_Handle.Motor_Position_Target *100.0f);
+    uint32_t Position_Temp = (uint32_t)(LK4005_Motor_Handle.Motor_Position_PID_Control_Handle.Motor_Position_Target * 100.0f);
     FDCAN_Send_Temp[0] = 0xA5;
     FDCAN_Send_Temp[1] = LK4005_Motor_Handle.Motor_Position_PID_Control_Handle.Move_Direction;
     FDCAN_Send_Temp[4] = (uint8_t)(Position_Temp & 0xFF);
-    FDCAN_Send_Temp[5] = (uint8_t)((Position_Temp >> 8*1) & 0xFF);
-    FDCAN_Send_Temp[6] = (uint8_t)((Position_Temp >> 8*2) & 0xFF);
-    FDCAN_Send_Temp[7] = (uint8_t)((Position_Temp >> 8*3) & 0xFF);
+    FDCAN_Send_Temp[5] = (uint8_t)((Position_Temp >> 8 * 1) & 0xFF);
+    FDCAN_Send_Temp[6] = (uint8_t)((Position_Temp >> 8 * 2) & 0xFF);
+    FDCAN_Send_Temp[7] = (uint8_t)((Position_Temp >> 8 * 3) & 0xFF);
     FDCAN_Send_Standard(LK4005_Motor_Handle.Motor_FDCAN_Handle, LK4005_Motor_Handle.Motor_ID, FDCAN_Send_Temp, LK4005_Motor_FDCAN_Length);
 }
 
@@ -81,14 +90,13 @@ void LK4005_Motor_Response_Data_Explain(FDCAN_HandleTypeDef *hfdcan, FDCAN_RxHea
             if (FDCAN_Rx_Data_Temp[0] == 0x94)
             {
                 LK4005_Motor_Handle->Motor_MIT_Control_Handle.Motor_Position_Actual = ((float)(((uint32_t)FDCAN_Rx_Data_Temp[7] << 24) | ((uint32_t)FDCAN_Rx_Data_Temp[6] << 16) | ((uint32_t)FDCAN_Rx_Data_Temp[5] << 8) | ((uint32_t)FDCAN_Rx_Data_Temp[4])) * Position_Conversion_Ratio / Reduction_Ratio) * PI / 180.0f;
-                LK4005_Motor_Handle->Motor_MIT_Control_Handle.Motor_Position_Actual = Normalize_Rad(LK4005_Motor_Handle->Motor_MIT_Control_Handle.Motor_Position_Actual);
 
                 LK4005_Motor_Handle->Motor_Position_PID_Control_Handle.Motor_Position_Actual = LK4005_Motor_Handle->Motor_MIT_Control_Handle.Motor_Position_Actual;
             }
 
             else if (FDCAN_Rx_Data_Temp[0] == 0x9C)
             {
-                LK4005_Motor_Handle->Motor_MIT_Control_Handle.Motor_Velocity_Actual = (float)((int16_t)FDCAN_Rx_Data_Temp[5] << 8 | (int16_t)FDCAN_Rx_Data_Temp[4]) * PI / 180.0f;
+                LK4005_Motor_Handle->Motor_MIT_Control_Handle.Motor_Velocity_Actual = (float)((int16_t)(FDCAN_Rx_Data_Temp[5] << 8 | FDCAN_Rx_Data_Temp[4])) * PI / 180.0f;
             }
         }
     }

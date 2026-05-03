@@ -5,7 +5,16 @@
 */
 void Motor_MIT_Control(Motor_MIT_Control_Handle_t *Motor_MIT_Control_Handle)
 {
-    Motor_MIT_Control_Handle->Output = Motor_MIT_Control_Handle->Output_Conversion_Ratio * (Motor_MIT_Control_Handle->MIT_Kp * (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) + Motor_MIT_Control_Handle->MIT_Kd * (Motor_MIT_Control_Handle->Motor_Velocity_Target - Motor_MIT_Control_Handle->Motor_Velocity_Actual) + Motor_MIT_Control_Handle->Motor_Torque_Feedforward);
+    if (fabsf(Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) >= Motor_MIT_Control_Handle->Mode_Threshold )
+    {
+
+        Motor_MIT_Control_Handle->Output = Motor_MIT_Control_Handle->MIT_Kp0 * (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) + Motor_MIT_Control_Handle->MIT_Kd0 * (Motor_MIT_Control_Handle->Motor_Velocity_Target - Motor_MIT_Control_Handle->Motor_Velocity_Actual) + Motor_MIT_Control_Handle->Motor_Torque_Feedforward + (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) / fabsf(Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) * Motor_MIT_Control_Handle->Motor_Torque_Friction;
+    }
+    else
+    {
+
+        Motor_MIT_Control_Handle->Output = Motor_MIT_Control_Handle->MIT_Kp1 * (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) + Motor_MIT_Control_Handle->MIT_Kd1 * (Motor_MIT_Control_Handle->Motor_Velocity_Target - Motor_MIT_Control_Handle->Motor_Velocity_Actual) + Motor_MIT_Control_Handle->Motor_Torque_Feedforward + (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) / fabsf(Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) * Motor_MIT_Control_Handle->Motor_Torque_Friction;
+    }
 }
 
 float Upperarm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle)
@@ -16,16 +25,6 @@ float Upperarm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Mo
 float Forearm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle)
 {
     return (Robotic_Arm_Mass_L2 * Robotic_Arm_Length_L2 * 0.5f + Robotic_Arm_Mass_End * Robotic_Arm_Length_L2) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle + Forearm_Motor_Angle);
-}
-
-float Normalize_Rad(float Angle_Rad)
-{
-    float x = fmodf(Angle_Rad, 2.0f * PI);
-    if (x < 0)
-    {
-        x += 2.0f * PI;
-    }
-    return x;
 }
 
 void Speed_Plan_Update(Speed_Plan_Handle_t *Speed_Plan_Handle, float position_actual, float position_target)
