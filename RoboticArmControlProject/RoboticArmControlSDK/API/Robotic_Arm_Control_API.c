@@ -3,7 +3,7 @@
 void LFD01M_Motor_Handle_Update(void)
 {
     uint8_t i = 0;
-    for (i = 0; i < LFD01M_Motor_Number;i++)
+    for (i = 0; i < LFD01M_Motor_Number; i++)
     {
         if (LFD01M_Motor_Handle[i].Motor_Type == Servo)
         {
@@ -21,31 +21,48 @@ void DMJ4310_Motor_Handle_Update(void)
     {
         if (LK4005_Motor_Handle[i].Motor_Type == Joint_Fore)
         {
-            Motor_Angle_Temp = LK4005_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Actual;
+            Motor_Angle_Temp = LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Position_Actual;
             break;
         }
     }
     for (i = 0; i < DMJ4310_Motor_Number; i++)
     {
-        if (DMJ4310_Motor_Handle[i].Motor_Type == Joint_Upper)
+        if (DMJ4310_Motor_Handle[i].Wait_Count >= 20)
         {
-            Speed_Plan_Update(&DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle, DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Actual, DMJ4310_Motor_Handle[i].Motor_Position_Target);
-            if (DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle && DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != init)
+            if (DMJ4310_Motor_Handle[i].Motor_Type == Joint_Upper)
             {
-                DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Target = DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
+                Speed_Plan_Update(&DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle, DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Actual, DMJ4310_Motor_Handle[i].Motor_Position_Target);
+                if (DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle)
+                {
+                    DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Target = DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
 
-                DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Velocity_Target = DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.v;
-            }
-            else
-            {
-                DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Target = DMJ4310_Motor_Handle[i].Motor_Position_Target;
-                DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Velocity_Target = 0.0f;
-            }
+                    DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Velocity_Target = DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * DMJ4310_Motor_Handle[i].Motor_Speed_Plan_Handle.v;
+                }
+                else
+                {
+                    DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Target = DMJ4310_Motor_Handle[i].Motor_Position_Target;
+                    DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Velocity_Target = 0.0f;
+                }
 
-            DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Torque_Feedforward = Upperarm_Gravity_Compensation(DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Actual, Motor_Angle_Temp);
-            DMJ4310_Motor_MIT_Control(DMJ4310_Motor_Handle[i]);
+                DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Torque_Feedforward = Upperarm_Gravity_Compensation(DMJ4310_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Actual, Motor_Angle_Temp);
+                DMJ4310_Motor_MIT_Control(DMJ4310_Motor_Handle[i]);
+            }
+            HAL_Delay(DMJ4310_Motor_Control_Cycle);
         }
-        HAL_Delay(DMJ4310_Motor_Control_Cycle);
+        else
+        {
+            uint8_t FDCAN_Send_Temp_[DMJ4310_Motor_FDCAN_Length] = {0};
+            FDCAN_Send_Temp_[0] = 0x7F;
+            FDCAN_Send_Temp_[1] = 0xFF;
+            FDCAN_Send_Temp_[2] = 0x7F;
+            FDCAN_Send_Temp_[3] = 0xF0;
+            FDCAN_Send_Temp_[4] = 0x00;
+            FDCAN_Send_Temp_[5] = 0x00;
+            FDCAN_Send_Temp_[6] = 0x07;
+            FDCAN_Send_Temp_[7] = 0xFF;
+
+            FDCAN_Send_Standard(DMJ4310_Motor_Handle[i].Motor_FDCAN_Handle, DMJ4310_Motor_Handle[i].Motor_ID, FDCAN_Send_Temp_, DMJ4310_Motor_FDCAN_Length);
+        }
     }
 }
 
@@ -64,53 +81,61 @@ void LK4005_Motor_Handle_Update(void)
     for (i = 0; i < LK4005_Motor_Number; i++)
     {
         LK4005_Motor_Read_Position(LK4005_Motor_Handle[i]);
-        HAL_Delay(2); //微小延迟完成FDCAN报文发送
+        HAL_Delay(2); // 微小延迟完成FDCAN报文发送
         LK4005_Motor_Read_Velocity(LK4005_Motor_Handle[i]);
         HAL_Delay(2); // 微小延迟完成FDCAN报文发送
-
-        if (LK4005_Motor_Handle[i].Motor_Type == Joint_Fore)
+        if (LK4005_Motor_Handle[i].Wait_Count >= 20)
         {
-            if (LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle && LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != init)
+            if (LK4005_Motor_Handle[i].Motor_Type == Joint_Fore)
             {
-                LK4005_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
+                Speed_Plan_Update(&LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle, LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Position_Actual, LK4005_Motor_Handle[i].Motor_Position_Target);
 
-                LK4005_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Velocity_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.v;
+                if (LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle)
+                {
+                    LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
+
+                    LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Velocity_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.v;
+                    Motor_MIT_Control(&LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0]);
+                    LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Torque_Feedforward = Forearm_Gravity_Compensation(Motor_Angle_Temp, LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Position_Actual);
+                    LK4005_Motor_Torque_Control(LK4005_Motor_Handle[i], LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0]);
+                }
+                else
+                {
+                    LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[1].Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
+                    LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[1].Motor_Velocity_Target = 0.0f;
+                    Motor_MIT_Control(&LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[1]);
+                    LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[1].Motor_Torque_Feedforward = Forearm_Gravity_Compensation(Motor_Angle_Temp, LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[1].Motor_Position_Actual);
+                    LK4005_Motor_Torque_Control(LK4005_Motor_Handle[i], LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[1]);
+                }
             }
-            else
+
+            if (LK4005_Motor_Handle[i].Motor_Type == Gimbal)
             {
-                LK4005_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
-                LK4005_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Velocity_Target = 0.0f;
+                Speed_Plan_Update(&LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle, LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Actual, LK4005_Motor_Handle[i].Motor_Position_Target);
+
+                if (LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle)
+                {
+                    LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
+                }
+                else
+                {
+                    LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
+                }
+
+                // LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
             }
 
-            LK4005_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Torque_Feedforward = Forearm_Gravity_Compensation(Motor_Angle_Temp, LK4005_Motor_Handle[i].Motor_MIT_Control_Handle.Motor_Position_Actual);
-            Motor_MIT_Control(&LK4005_Motor_Handle[i].Motor_MIT_Control_Handle);
-            LK4005_Motor_Torque_Control(LK4005_Motor_Handle[i]);
+            HAL_Delay(LK4005_Motor_Control_Cycle);
         }
-
-        if (LK4005_Motor_Handle[i].Motor_Type == Gimbal)
-        {
-            if (LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle && LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != init)
-            {
-                LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
-            }
-            else
-            {
-                LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
-            }
-
-            //LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
-        }
-
-        HAL_Delay(LK4005_Motor_Control_Cycle);
     }
 }
 
 void Robotic_Arm_Control_Init(void)
 {
     Motor_Control_Init();
-    HAL_Delay(2000);
+    HAL_Delay(1500);
     uint8_t i = 0;
-    for (i = 0; i < DMJ4310_Motor_Number;i++)
+    for (i = 0; i < DMJ4310_Motor_Number; i++)
     {
         DMJ4310_Motor_Enable(DMJ4310_Motor_Handle[i]);
     }

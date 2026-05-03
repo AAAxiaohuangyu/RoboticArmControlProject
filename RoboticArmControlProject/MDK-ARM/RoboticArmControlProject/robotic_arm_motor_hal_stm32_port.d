@@ -44,3 +44,7 @@ roboticarmcontrolproject\robotic_arm_motor_hal_stm32_port.o: ../Core/Inc/fdcan.h
 roboticarmcontrolproject\robotic_arm_motor_hal_stm32_port.o: ../RoboticArmControlSDK/Core/LFD01M_Motor_Driver.h
 roboticarmcontrolproject\robotic_arm_motor_hal_stm32_port.o: ../Core/Inc/tim.h
 roboticarmcontrolproject\robotic_arm_motor_hal_stm32_port.o: ../RoboticArmControlSDK/Core/LK4005_Motor_Driver.h
+roboticarmcontrolproject\robotic_arm_motor_hal_stm32_port.o: ../RoboticArmControlSDK/API/Robotic_Arm_Control_API.h
+roboticarmcontrolproject\robotic_arm_motor_hal_stm32_port.o: ../RoboticArmControlSDK/Core/Control_Algorithm.h
+roboticarmcontrolproject\robotic_arm_motor_hal_stm32_port.o: ../RoboticArmControlSDK/Port/Robotic_Arm_Communication_HAL_STM32_Port.h
+roboticarmcontrolproject\robotic_arm_motor_hal_stm32_port.o: ../Core/Inc/usart.h

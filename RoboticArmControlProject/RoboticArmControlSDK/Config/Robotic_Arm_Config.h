@@ -40,6 +40,7 @@ typedef struct
     float s2;
     float s1;
     float v1;
+    float Threshold_S;
     Speed_Plan_State_type Speed_Plan_State;
 
 }Speed_Plan_Handle_t;
@@ -53,11 +54,8 @@ typedef struct
     float Motor_Velocity_Target;    // 单位为rad/s
     float Motor_Torque_Feedforward; // 单位为N*m
     float Motor_Torque_Friction;
-    float MIT_Kp0;
-    float MIT_Kp1;
-    float MIT_Kd0;
-    float MIT_Kd1;
-    float Mode_Threshold;
+    float MIT_Kp;
+    float MIT_Kd;
     float Output; //达妙电机由于其特殊的CAN报文控制用不到这个变量
 } Motor_MIT_Control_Handle_t;
 
@@ -86,6 +84,7 @@ typedef struct
     float Motor_Position_Target; //单位为rad
     Motor_MIT_Control_Handle_t Motor_MIT_Control_Handle;
     Speed_Plan_Handle_t Motor_Speed_Plan_Handle;
+    uint64_t Wait_Count;
 } DMJ4310_Motor_Handle_t;
 
 typedef struct
@@ -94,9 +93,10 @@ typedef struct
     FDCAN_HandleTypeDef *Motor_FDCAN_Handle;
     uint16_t Motor_ID;
     float Motor_Position_Target;                         // 单位为rad
-    Motor_MIT_Control_Handle_t Motor_MIT_Control_Handle; // Position范围:0~2pi,单位为rad,Output范围:-33A~33A,单位为A
+    Motor_MIT_Control_Handle_t Motor_MIT_Control_Handle[2]; // Position范围:0~2pi,单位为rad,Output范围:-33A~33A,单位为A
     Motor_Position_PID_Control_Handle_t Motor_Position_PID_Control_Handle;
     Speed_Plan_Handle_t Motor_Speed_Plan_Handle;
+    uint64_t Wait_Count;
 } LK4005_Motor_Handle_t;
 
 #define PI 3.14159f

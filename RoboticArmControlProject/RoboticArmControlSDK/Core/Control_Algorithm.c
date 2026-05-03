@@ -5,15 +5,11 @@
 */
 void Motor_MIT_Control(Motor_MIT_Control_Handle_t *Motor_MIT_Control_Handle)
 {
-    if (fabsf(Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) >= Motor_MIT_Control_Handle->Mode_Threshold )
-    {
+    Motor_MIT_Control_Handle->Output = Motor_MIT_Control_Handle->MIT_Kp * (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) + Motor_MIT_Control_Handle->MIT_Kd * (Motor_MIT_Control_Handle->Motor_Velocity_Target - Motor_MIT_Control_Handle->Motor_Velocity_Actual) + Motor_MIT_Control_Handle->Motor_Torque_Feedforward;
 
-        Motor_MIT_Control_Handle->Output = Motor_MIT_Control_Handle->MIT_Kp0 * (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) + Motor_MIT_Control_Handle->MIT_Kd0 * (Motor_MIT_Control_Handle->Motor_Velocity_Target - Motor_MIT_Control_Handle->Motor_Velocity_Actual) + Motor_MIT_Control_Handle->Motor_Torque_Feedforward + (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) / fabsf(Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) * Motor_MIT_Control_Handle->Motor_Torque_Friction;
-    }
-    else
+    if (fabsf(Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) >= 0.01f)
     {
-
-        Motor_MIT_Control_Handle->Output = Motor_MIT_Control_Handle->MIT_Kp1 * (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) + Motor_MIT_Control_Handle->MIT_Kd1 * (Motor_MIT_Control_Handle->Motor_Velocity_Target - Motor_MIT_Control_Handle->Motor_Velocity_Actual) + Motor_MIT_Control_Handle->Motor_Torque_Feedforward + (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) / fabsf(Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) * Motor_MIT_Control_Handle->Motor_Torque_Friction;
+        Motor_MIT_Control_Handle->Output += (Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) / fabsf(Motor_MIT_Control_Handle->Motor_Position_Target - Motor_MIT_Control_Handle->Motor_Position_Actual) * Motor_MIT_Control_Handle->Motor_Torque_Friction;
     }
 }
 
@@ -45,6 +41,12 @@ void Speed_Plan_Update(Speed_Plan_Handle_t *Speed_Plan_Handle, float position_ac
     {
         Speed_Plan_Handle->error_s = position_target - position_actual;
         Speed_Plan_Handle->position_initial = position_actual;
+
+        if (fabsf(Speed_Plan_Handle->error_s) <= Speed_Plan_Handle->Threshold_S)
+        {
+            Speed_Plan_Handle->Speed_Plan_State = idle;
+            break;
+        }
 
         if (Speed_Plan_Handle->error_s >= 0.0f)
         {
@@ -93,6 +95,7 @@ void Speed_Plan_Update(Speed_Plan_Handle_t *Speed_Plan_Handle, float position_ac
         if (Speed_Plan_Handle->a <= 0)
         {
             Speed_Plan_Handle->a = 0;
+            Speed_Plan_Handle->v = Speed_Plan_Handle->v_max;
             Speed_Plan_Handle->s_accel_used = Speed_Plan_Handle->s;
             if (fabsf(Speed_Plan_Handle->error_s) >= powf(Speed_Plan_Handle->v_max, 2.0f) / Speed_Plan_Handle->a_max + Speed_Plan_Handle->a_max * Speed_Plan_Handle->v_max / Speed_Plan_Handle->j)
             {
@@ -150,6 +153,10 @@ void Speed_Plan_Update(Speed_Plan_Handle_t *Speed_Plan_Handle, float position_ac
         }
         break;
     }
+    }
+    if(fabsf(Speed_Plan_Handle->s - fabsf(Speed_Plan_Handle->error_s)) <= 0.003f || Speed_Plan_Handle->v < 0.0f)
+    {
+        Speed_Plan_Handle->Speed_Plan_State = idle;
     }
     Speed_Plan_Handle->Time_Stamp = HAL_GetTick();
 }

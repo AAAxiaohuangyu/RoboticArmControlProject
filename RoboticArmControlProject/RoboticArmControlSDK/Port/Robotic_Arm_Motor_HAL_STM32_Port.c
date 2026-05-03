@@ -2,6 +2,7 @@
 #include "DMJ4310_Motor_Driver.h"
 #include "LFD01M_Motor_Driver.h"
 #include "LK4005_Motor_Driver.h"
+#include "Robotic_Arm_Control_API.h"
 
 void Motor_Control_Init(void)
 {

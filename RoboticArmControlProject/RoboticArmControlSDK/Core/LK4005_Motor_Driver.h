@@ -15,7 +15,7 @@
 extern LK4005_Motor_Handle_t LK4005_Motor_Handle[];
 
 void LK4005_Motor_Control_Init(void);
-void LK4005_Motor_Torque_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle);
+void LK4005_Motor_Torque_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle, Motor_MIT_Control_Handle_t Motor_MIT_Control_Handle);
 void LK4005_Motor_Position_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle);
 void LK4005_Motor_Read_Position(LK4005_Motor_Handle_t LK4005_Motor_Handle);
 void LK4005_Motor_Read_Velocity(LK4005_Motor_Handle_t LK4005_Motor_Handle);

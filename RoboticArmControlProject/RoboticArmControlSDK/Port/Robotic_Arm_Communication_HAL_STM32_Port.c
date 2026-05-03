@@ -45,6 +45,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
             else if (subtitle == 1)
             {
                 LK4005_Motor_Handle[1].Motor_Position_Target = temp1;
+                LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
             }
         }
 
@@ -56,6 +57,23 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 
         HAL_UARTEx_ReceiveToIdle_DMA(Communication_Usart_Handle_Used0, Usart_Used0_Rx_Buff, Usart_Used0_Rx_Buff_Length);
     }
+}
+
+void Communication_Test(void)
+{
+    uint8_t package[24] = {0};
+
+    memcpy(&package[0], &LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.s, 4);
+    memcpy(&package[4], &LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.v, 4);
+    memcpy(&package[8], &LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.a, 4);
+    memcpy(&package[12], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Output, 4);
+    memcpy(&package[16], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Velocity_Actual, 4);
+    package[20] = 0x00;
+    package[21] = 0x00;
+    package[22] = 0x80;
+    package[23] = 0x7f;
+    HAL_UART_Transmit_DMA(&huart1, package, 24);
+    HAL_Delay(3);
 }
 
 void Communication_Usart_Used0(void)

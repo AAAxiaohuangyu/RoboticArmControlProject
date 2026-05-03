@@ -6,7 +6,7 @@
 
 #define LFD01M_Motor_PWM_CCR_Max 2500
 #define LFD01M_Motor_PWM_CCR_Min 500
-#define LFD01M_Motor_Control_Cycle 5 // 控制周期,单位为ms
+#define LFD01M_Motor_Control_Cycle 1
 
 extern LFD01M_Motor_Handle_t LFD01M_Motor_Handle[];
 

@@ -8,10 +8,14 @@ void DMJ4310_Motor_Control_Init(void)
     DMJ4310_Motor_Handle[0].Motor_FDCAN_Handle = &hfdcan2;
     DMJ4310_Motor_Handle[0].Motor_ID = 1;
     DMJ4310_Motor_Handle[0].Motor_Type = Joint_Upper;
-    DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.MIT_Kp0 = 27.8f;
-    DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.MIT_Kd0 = 0.68f;
+    DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.MIT_Kp = 27.8f;
+    DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.MIT_Kd = 0.68f;
     DMJ4310_Motor_Handle[0].Motor_Position_Target = 0.0f;
-    DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = idle;
+    DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
+    DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.j = 15.5f;
+    DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.a_max = 1.5f;
+    DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.v_max = 0.45f;
+    DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Threshold_S = 0.1745f; // 10°的阈值
 
     FDCAN_FilterTypeDef sfilter = {0};
     sfilter.IdType = FDCAN_STANDARD_ID;
@@ -34,8 +38,8 @@ void DMJ4310_Motor_MIT_Control(DMJ4310_Motor_Handle_t DMJ4310_Motor_Handle)
 
     uint16_t Position_Temp = Float_To_Uint(DMJ4310_Motor_Handle.Motor_MIT_Control_Handle.Motor_Position_Target, DMJ4310_Motor_Position_Min, DMJ4310_Motor_Position_Max, DMJ4310_Motor_Position_Length);
     uint16_t Velocity_Temp = Float_To_Uint(DMJ4310_Motor_Handle.Motor_MIT_Control_Handle.Motor_Velocity_Target, DMJ4310_Motor_Velocity_Min, DMJ4310_Motor_Velocity_Max, DMJ4310_Motor_Velocity_Length);
-    uint16_t MIT_Kp_Temp = Float_To_Uint(DMJ4310_Motor_Handle.Motor_MIT_Control_Handle.MIT_Kp0, DMJ4310_Motor_MIT_Kp_Min, DMJ4310_Motor_MIT_Kp_Max, DMJ4310_Motor_MIT_Kp_Length);
-    uint16_t MIT_Kd_Temp = Float_To_Uint(DMJ4310_Motor_Handle.Motor_MIT_Control_Handle.MIT_Kd0, DMJ4310_Motor_MIT_Kd_Min, DMJ4310_Motor_MIT_Kd_Max, DMJ4310_Motor_MIT_Kd_Length);
+    uint16_t MIT_Kp_Temp = Float_To_Uint(DMJ4310_Motor_Handle.Motor_MIT_Control_Handle.MIT_Kp, DMJ4310_Motor_MIT_Kp_Min, DMJ4310_Motor_MIT_Kp_Max, DMJ4310_Motor_MIT_Kp_Length);
+    uint16_t MIT_Kd_Temp = Float_To_Uint(DMJ4310_Motor_Handle.Motor_MIT_Control_Handle.MIT_Kd, DMJ4310_Motor_MIT_Kd_Min, DMJ4310_Motor_MIT_Kd_Max, DMJ4310_Motor_MIT_Kd_Length);
     uint16_t Torque_Temp = Float_To_Uint(DMJ4310_Motor_Handle.Motor_MIT_Control_Handle.Motor_Torque_Feedforward, DMJ4310_Motor_Torque_Min, DMJ4310_Motor_Torque_Max, DMJ4310_Motor_Torque_Length);
 
     FDCAN_Send_Temp[0] = Position_Temp >> 8;
@@ -81,6 +85,7 @@ void DMJ4310_Motor_Response_Data_Explain(FDCAN_HandleTypeDef *hfdcan, FDCAN_RxHe
                 DMJ4310_Motor_Handle->Motor_MIT_Control_Handle.Motor_Velocity_Actual = Uint_To_Float((int)Velocity_Temp, DMJ4310_Motor_Velocity_Min, DMJ4310_Motor_Velocity_Max, DMJ4310_Motor_Velocity_Length);
                 DMJ4310_Motor_Handle->Motor_Torque_Actual = Uint_To_Float((int)Torque_Temp, DMJ4310_Motor_Torque_Min, DMJ4310_Motor_Torque_Max, DMJ4310_Motor_Torque_Length);
             }
+            DMJ4310_Motor_Handle->Wait_Count++;
         }
     }
 }
