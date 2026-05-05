@@ -1,5 +1,15 @@
 #include "Control_Algorithm.h"
 
+float Normalize_Angle(float Angle)
+{
+    float Res = fmodf(Angle, 2.0f * PI);
+    if (Res < 0)
+    {
+        Res += 2.0f * PI;
+    }
+    return Res;
+}
+
 /*
 //达妙电机由于其特殊的CAN报文控制用不到这个函数
 */

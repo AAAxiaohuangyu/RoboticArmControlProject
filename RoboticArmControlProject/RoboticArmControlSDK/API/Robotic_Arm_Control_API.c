@@ -93,7 +93,6 @@ void LK4005_Motor_Handle_Update(void)
                 if (LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle)
                 {
                     LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
-
                     LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Velocity_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.v;
                     Motor_MIT_Control(&LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0]);
                     LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Torque_Feedforward = Forearm_Gravity_Compensation(Motor_Angle_Temp, LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Position_Actual);
@@ -111,18 +110,8 @@ void LK4005_Motor_Handle_Update(void)
 
             if (LK4005_Motor_Handle[i].Motor_Type == Gimbal)
             {
-                Speed_Plan_Update(&LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle, LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Actual, LK4005_Motor_Handle[i].Motor_Position_Target);
-
-                if (LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle)
-                {
-                    LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
-                }
-                else
-                {
-                    LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
-                }
-
-                // LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
+                LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
+                //LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
             }
 
             HAL_Delay(LK4005_Motor_Control_Cycle);
@@ -144,7 +133,7 @@ void Robotic_Arm_Control_Init(void)
 
 void Robotic_Arm_Control(void)
 {
-    LFD01M_Motor_Handle_Update();
+    //LFD01M_Motor_Handle_Update();
     DMJ4310_Motor_Handle_Update();
     LK4005_Motor_Handle_Update();
 }

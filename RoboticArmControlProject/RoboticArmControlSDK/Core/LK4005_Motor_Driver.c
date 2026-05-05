@@ -8,7 +8,8 @@ void LK4005_Motor_Control_Init(void)
     LK4005_Motor_Handle[0].Motor_FDCAN_Handle = &hfdcan1;
     LK4005_Motor_Handle[0].Motor_ID = 0x14C;
     LK4005_Motor_Handle[0].Motor_Type = Gimbal;
-    LK4005_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = idle;
+    LK4005_Motor_Handle[0].Motor_Position_Target = 3.14f;
+
 
     LK4005_Motor_Handle[1].Motor_FDCAN_Handle = &hfdcan2;
     LK4005_Motor_Handle[1].Motor_ID = 0x149;
@@ -63,9 +64,8 @@ void LK4005_Motor_Torque_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle, Moto
 void LK4005_Motor_Position_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle)
 {
     uint8_t FDCAN_Send_Temp[LK4005_Motor_FDCAN_Length] = {0};
-    uint32_t Position_Temp = (uint32_t)(LK4005_Motor_Handle.Motor_Position_PID_Control_Handle.Motor_Position_Target * 100.0f);
-    FDCAN_Send_Temp[0] = 0xA5;
-    FDCAN_Send_Temp[1] = LK4005_Motor_Handle.Motor_Position_PID_Control_Handle.Move_Direction;
+    int32_t Position_Temp = (int32_t)(Normalize_Angle(LK4005_Motor_Handle.Motor_Position_PID_Control_Handle.Motor_Position_Target + Angle_Gimbal_Offset) * 180.0f / PI * 100.0f);
+    FDCAN_Send_Temp[0] = 0xA3;
     FDCAN_Send_Temp[4] = (uint8_t)(Position_Temp & 0xFF);
     FDCAN_Send_Temp[5] = (uint8_t)((Position_Temp >> 8 * 1) & 0xFF);
     FDCAN_Send_Temp[6] = (uint8_t)((Position_Temp >> 8 * 2) & 0xFF);
@@ -97,6 +97,10 @@ void LK4005_Motor_Response_Data_Explain(FDCAN_HandleTypeDef *hfdcan, FDCAN_RxHea
             {
                 LK4005_Motor_Handle->Motor_MIT_Control_Handle[0].Motor_Position_Actual = ((float)(((uint32_t)FDCAN_Rx_Data_Temp[7] << 24) | ((uint32_t)FDCAN_Rx_Data_Temp[6] << 16) | ((uint32_t)FDCAN_Rx_Data_Temp[5] << 8) | ((uint32_t)FDCAN_Rx_Data_Temp[4])) * Position_Conversion_Ratio / Reduction_Ratio) * PI / 180.0f;
 
+                if(LK4005_Motor_Handle->Motor_Type == Gimbal)
+                {
+                    LK4005_Motor_Handle->Motor_MIT_Control_Handle[0].Motor_Position_Actual = Normalize_Angle(LK4005_Motor_Handle->Motor_MIT_Control_Handle[0].Motor_Position_Actual - Angle_Gimbal_Offset);
+                }
                 LK4005_Motor_Handle->Motor_Position_PID_Control_Handle.Motor_Position_Actual = LK4005_Motor_Handle->Motor_MIT_Control_Handle[0].Motor_Position_Actual;
 
                 LK4005_Motor_Handle->Motor_MIT_Control_Handle[1].Motor_Position_Actual = LK4005_Motor_Handle->Motor_MIT_Control_Handle[0].Motor_Position_Actual;

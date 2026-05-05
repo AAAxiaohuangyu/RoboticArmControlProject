@@ -63,11 +63,11 @@ void Communication_Test(void)
 {
     uint8_t package[24] = {0};
 
-    memcpy(&package[0], &LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.s, 4);
-    memcpy(&package[4], &LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.v, 4);
-    memcpy(&package[8], &LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.a, 4);
-    memcpy(&package[12], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Output, 4);
-    memcpy(&package[16], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Velocity_Actual, 4);
+    memcpy(&package[0], &LK4005_Motor_Handle[0].Motor_Speed_Plan_Handle.s, 4);
+    memcpy(&package[4], &LK4005_Motor_Handle[0].Motor_Speed_Plan_Handle.v, 4);
+    memcpy(&package[8], &LK4005_Motor_Handle[0].Motor_Speed_Plan_Handle.a, 4);
+    memcpy(&package[12], &LK4005_Motor_Handle[0].Motor_Position_PID_Control_Handle.Motor_Position_Target, 4);
+    memcpy(&package[16], &LK4005_Motor_Handle[0].Motor_Position_PID_Control_Handle.Motor_Position_Actual, 4);
     package[20] = 0x00;
     package[21] = 0x00;
     package[22] = 0x80;

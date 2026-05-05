@@ -63,7 +63,6 @@ typedef struct
 {
     float Motor_Position_Actual; //范围:0~2pi,单位为rad
     float Motor_Position_Target; // 范围:0~2pi,单位为rad
-    int8_t Move_Direction; //0:顺时针,1:逆时针
 } Motor_Position_PID_Control_Handle_t; //供云台电机使用
 
 typedef struct
