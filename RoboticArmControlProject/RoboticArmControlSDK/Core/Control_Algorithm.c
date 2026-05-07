@@ -1,7 +1,8 @@
 #include "Control_Algorithm.h"
 
-float Robotic_Arm_Mass_L1 = 0.0f;
-float Robotic_Arm_Mass_L2 = 0.0f;
+float Robotic_Arm_Mass_L1 = 0.14f;
+float Robotic_Arm_Mass_L2 = 2.9f;
+float Robotic_Arm_Mass_End = 0.15f;
 
 // 弧度归一化到0~2pi
 float Normalize_Angle(float Angle)
@@ -29,7 +30,7 @@ void Motor_MIT_Control(Motor_MIT_Control_Handle_t *Motor_MIT_Control_Handle)
 
 float Upperarm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle)
 {
-    return ((Robotic_Arm_Mass_L1 * Robotic_Arm_Length_L1 * 0.5f + (Robotic_Arm_Mass_Forearm_Motor + Robotic_Arm_Mass_L2 + Robotic_Arm_Mass_End) * Robotic_Arm_Length_L1) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle) + (Robotic_Arm_Mass_L2 * Robotic_Arm_Length_L2 * 0.5f + Robotic_Arm_Mass_End * Robotic_Arm_Length_L2) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle + Forearm_Motor_Angle));
+    return ((Robotic_Arm_Mass_L1 * Robotic_Arm_Length_L1 * 0.5f + Robotic_Arm_Mass_Forearm_Motor * Robotic_Arm_Length_L1) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle) + (Robotic_Arm_Mass_L2 * Robotic_Arm_Length_L2 * 0.5f + Robotic_Arm_Mass_End * Robotic_Arm_Length_L2) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle + Forearm_Motor_Angle));
 }
 
 float Forearm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle)

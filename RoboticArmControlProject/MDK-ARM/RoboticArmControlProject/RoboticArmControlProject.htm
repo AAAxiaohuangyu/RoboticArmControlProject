@@ -3,7 +3,7 @@
 <title>Static Call Graph - [RoboticArmControlProject\RoboticArmControlProject.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image RoboticArmControlProject\RoboticArmControlProject.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu May 07 17:32:04 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu May 07 22:09:43 2026
 <BR><P>
 <H3>Maximum Stack Usage =        564 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -846,12 +846,12 @@ Global Symbols
 <P><STRONG><a name="[c8]"></a>_scanf_really_real</STRONG> (Thumb, 684 bytes, Stack size 120 bytes, scanf_fp.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 340<LI>Call Chain = _scanf_really_real &rArr; _fp_value &rArr; _btod_etento &rArr; _btod_emul &rArr; _e2e
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_locale
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_is_digit
+<BR>[Calls]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_is_digit
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_fp_value
 <LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__mathlib_narrow
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_scanf_infnan
 <LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_scanf_hex_real
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_locale
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_scanf_real
 </UL>
@@ -1059,11 +1059,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32h723xx.o(RESET)
 </UL>
-<P><STRONG><a name="[dd]"></a>Communication_Test</STRONG> (Thumb, 78 bytes, Stack size 32 bytes, robotic_arm_communication_hal_stm32_port.o(i.Communication_Test))
-<BR><BR>[Stack]<UL><LI>Max Depth = 124<LI>Call Chain = Communication_Test &rArr; HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
+<P><STRONG><a name="[dd]"></a>Communication_Test</STRONG> (Thumb, 96 bytes, Stack size 48 bytes, robotic_arm_communication_hal_stm32_port.o(i.Communication_Test))
+<BR><BR>[Stack]<UL><LI>Max Depth = 140<LI>Call Chain = Communication_Test &rArr; HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
+<BR>[Calls]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -1123,7 +1123,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[17c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Robotic_Arm_Control_Init
 </UL>
 
-<P><STRONG><a name="[e9]"></a>DMJ4310_Motor_Handle_Update</STRONG> (Thumb, 304 bytes, Stack size 152 bytes, robotic_arm_control_api.o(i.DMJ4310_Motor_Handle_Update))
+<P><STRONG><a name="[e9]"></a>DMJ4310_Motor_Handle_Update</STRONG> (Thumb, 308 bytes, Stack size 152 bytes, robotic_arm_control_api.o(i.DMJ4310_Motor_Handle_Update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 300<LI>Call Chain = DMJ4310_Motor_Handle_Update &rArr; DMJ4310_Motor_MIT_Control &rArr; FDCAN_Send_Standard &rArr; HAL_FDCAN_AddMessageToTxFifoQ &rArr; FDCAN_CopyMessageToRAM
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
@@ -1218,7 +1218,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMJ4310_Motor_MIT_Control
 </UL>
 
-<P><STRONG><a name="[f4]"></a>Forearm_Gravity_Compensation</STRONG> (Thumb, 46 bytes, Stack size 8 bytes, control_algorithm.o(i.Forearm_Gravity_Compensation))
+<P><STRONG><a name="[f4]"></a>Forearm_Gravity_Compensation</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, control_algorithm.o(i.Forearm_Gravity_Compensation))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = Forearm_Gravity_Compensation &rArr; __hardfp_cosf &rArr; __mathlib_rredf2
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_cosf
@@ -1253,11 +1253,11 @@ Global Symbols
 <P><STRONG><a name="[f8]"></a>HAL_DMA_Init</STRONG> (Thumb, 922 bytes, Stack size 40 bytes, stm32h7xx_hal_dma.o(i.HAL_DMA_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = HAL_DMA_Init &rArr; DMA_CalcDMAMUXChannelBaseAndMask
 </UL>
-<BR>[Calls]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
-<LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_CheckFifoParam
+<BR>[Calls]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_CheckFifoParam
 <LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_CalcDMAMUXRequestGenBaseAndMask
 <LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_CalcDMAMUXChannelBaseAndMask
 <LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMA_CalcBaseAndBitshift
+<LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
 <BR>[Called By]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
@@ -1471,12 +1471,12 @@ Global Symbols
 <LI><a href="#[12d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_OscConfig
 <LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_PWREx_ConfigSupply
+<LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCCEx_PLL3_Config
 <LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCCEx_PLL2_Config
-<LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort
-<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[17f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 <LI><a href="#[161]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_CheckIdleState
+<LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Speed_Plan_Update
 </UL>
 
@@ -1657,12 +1657,12 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = HAL_SPI_IRQHandler &rArr; HAL_DMA_Abort_IT
 </UL>
 <BR>[Calls]<UL><LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_DMA_Abort_IT
-<LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseTransfer
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxRxCpltCallback
 <LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_TxCpltCallback
 <LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_SuspendCallback
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_RxCpltCallback
 <LI><a href="#[131]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_ErrorCallback
+<LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CloseTransfer
 </UL>
 <BR>[Called By]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI2_IRQHandler
 </UL>
@@ -1851,12 +1851,12 @@ Global Symbols
 <LI><a href="#[e1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Communication_Usart_Init
 </UL>
 
-<P><STRONG><a name="[151]"></a>HAL_UARTEx_RxEventCallback</STRONG> (Thumb, 272 bytes, Stack size 32 bytes, robotic_arm_communication_hal_stm32_port.o(i.HAL_UARTEx_RxEventCallback))
+<P><STRONG><a name="[151]"></a>HAL_UARTEx_RxEventCallback</STRONG> (Thumb, 318 bytes, Stack size 32 bytes, robotic_arm_communication_hal_stm32_port.o(i.HAL_UARTEx_RxEventCallback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 540<LI>Call Chain = HAL_UARTEx_RxEventCallback &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_real &rArr; _scanf_really_real &rArr; _fp_value &rArr; _btod_etento &rArr; _btod_emul &rArr; _e2e
 </UL>
-<BR>[Calls]<UL><LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
-<LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncmp
+<BR>[Calls]<UL><LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strncmp
 <LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__0sscanf
+<LI><a href="#[e2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UARTEx_ReceiveToIdle_DMA
 </UL>
 <BR>[Called By]<UL><LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_IRQHandler
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_DMARxHalfCplt
@@ -1993,7 +1993,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[163]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LFD01M_Motor_Handle_Update
 </UL>
 
-<P><STRONG><a name="[165]"></a>LK4005_Motor_Control_Init</STRONG> (Thumb, 230 bytes, Stack size 56 bytes, lk4005_motor_driver.o(i.LK4005_Motor_Control_Init))
+<P><STRONG><a name="[165]"></a>LK4005_Motor_Control_Init</STRONG> (Thumb, 222 bytes, Stack size 56 bytes, lk4005_motor_driver.o(i.LK4005_Motor_Control_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = LK4005_Motor_Control_Init &rArr; HAL_FDCAN_ConfigFilter
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FDCAN_ConfigFilter
@@ -2003,7 +2003,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Control_Init
 </UL>
 
-<P><STRONG><a name="[166]"></a>LK4005_Motor_Handle_Update</STRONG> (Thumb, 384 bytes, Stack size 240 bytes, robotic_arm_control_api.o(i.LK4005_Motor_Handle_Update))
+<P><STRONG><a name="[166]"></a>LK4005_Motor_Handle_Update</STRONG> (Thumb, 378 bytes, Stack size 240 bytes, robotic_arm_control_api.o(i.LK4005_Motor_Handle_Update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 348<LI>Call Chain = LK4005_Motor_Handle_Update &rArr; LK4005_Motor_Torque_Control &rArr; FDCAN_Send_Standard &rArr; HAL_FDCAN_AddMessageToTxFifoQ &rArr; FDCAN_CopyMessageToRAM
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
@@ -2321,7 +2321,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMJ4310_Motor_Response_Data_Explain
 </UL>
 
-<P><STRONG><a name="[ec]"></a>Upperarm_Gravity_Compensation</STRONG> (Thumb, 118 bytes, Stack size 32 bytes, control_algorithm.o(i.Upperarm_Gravity_Compensation))
+<P><STRONG><a name="[ec]"></a>Upperarm_Gravity_Compensation</STRONG> (Thumb, 110 bytes, Stack size 32 bytes, control_algorithm.o(i.Upperarm_Gravity_Compensation))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = Upperarm_Gravity_Compensation &rArr; __hardfp_cosf &rArr; __mathlib_rredf2
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_cosf

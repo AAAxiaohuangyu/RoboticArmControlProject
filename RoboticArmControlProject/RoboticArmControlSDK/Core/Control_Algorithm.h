@@ -5,6 +5,7 @@
 
 extern float Robotic_Arm_Mass_L1;
 extern float Robotic_Arm_Mass_L2;
+extern float Robotic_Arm_Mass_End;
 
 float Normalize_Angle(float Angle);
 void Motor_MIT_Control(Motor_MIT_Control_Handle_t *Motor_MIT_Control_Handle);

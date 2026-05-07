@@ -24,6 +24,27 @@ typedef enum
     phase7,
 } Speed_Plan_State_type;
 
+typedef struct
+{
+    float Accel_X;
+    float Accel_Y;
+    float Accel_Z;
+    float Gyro_X;
+    float Gyro_Y;
+    float Gyro_Z;
+} IMU_Raw_Data_t;
+
+typedef struct
+{
+    SPI_HandleTypeDef *SPI_Handle;
+    uint8_t Tx_Data_Buff;
+    uint8_t Rx_Data_Buff;
+    IMU_Raw_Data_t IMU_Raw_Data;
+    float yaw;
+    float pitch;
+    float roll;
+} IMU_Handle_t;
+
 typedef struct 
 {
     uint32_t Time_Stamp;
@@ -107,7 +128,7 @@ typedef struct
 #define Robotic_Arm_Length_L1 0.462f // 大臂机械臂的长度,单位为m
 #define Robotic_Arm_Length_L2 0.446f // 小臂机械臂的长度,单位为m
 #define Robotic_Arm_Mass_Forearm_Motor 0.154f // 小臂电机的质量,单位为kg
-#define Robotic_Arm_Mass_End 0.0f           // 末端舵机,摄像头等的总质量,单位为kg
+//#define Robotic_Arm_Mass_End 0.0f           // 末端舵机,摄像头等的总质量,单位为kg
 #define Robotic_Arm_Angle_Offset 0.0f //整体机械臂(云台)相对于地面的夹角,单位为rad 
 #define g 9.7913f
 
