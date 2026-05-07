@@ -33,12 +33,15 @@ roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_h
 roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c_ex.h
 roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h
 roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h
+roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h
+roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h
 roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 roboticarmcontrolproject\main.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 roboticarmcontrolproject\main.o: ../Core/Inc/dma.h
 roboticarmcontrolproject\main.o: ../Core/Inc/fdcan.h
+roboticarmcontrolproject\main.o: ../Core/Inc/spi.h
 roboticarmcontrolproject\main.o: ../Core/Inc/tim.h
 roboticarmcontrolproject\main.o: ../Core/Inc/usart.h
 roboticarmcontrolproject\main.o: ../Core/Inc/gpio.h

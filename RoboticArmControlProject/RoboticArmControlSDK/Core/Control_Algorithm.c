@@ -1,5 +1,9 @@
 #include "Control_Algorithm.h"
 
+float Robotic_Arm_Mass_L1 = 0.0f;
+float Robotic_Arm_Mass_L2 = 0.0f;
+
+// 弧度归一化到0~2pi
 float Normalize_Angle(float Angle)
 {
     float Res = fmodf(Angle, 2.0f * PI);

@@ -3,6 +3,9 @@
 
 #include "Robotic_Arm_Config.h"
 
+extern float Robotic_Arm_Mass_L1;
+extern float Robotic_Arm_Mass_L2;
+
 float Normalize_Angle(float Angle);
 void Motor_MIT_Control(Motor_MIT_Control_Handle_t *Motor_MIT_Control_Handle);
 float Upperarm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle);

@@ -4,6 +4,7 @@
 #include "LFD01M_Motor_Driver.h"
 #include "LK4005_Motor_Driver.h"
 #include "DMJ4310_Motor_Driver.h"
+#include "Control_Algorithm.h"
 
 uint8_t Usart_Used0_Rx_Buff[Usart_Used0_Rx_Buff_Length] = {0};
 
@@ -53,6 +54,17 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
         {
             sscanf((char *)Usart_Used0_Rx_Buff, "%s %f", tittle, &temp1);
             DMJ4310_Motor_Handle[0].Motor_Position_Target = temp1;
+        }
+
+        else if (strncmp((char *)Usart_Used0_Rx_Buff, "L1M", 3) == 0)
+        {
+            sscanf((char *)Usart_Used0_Rx_Buff, "%s %f", tittle, &temp1);
+            Robotic_Arm_Mass_L1 = temp1;
+        }
+        else if (strncmp((char *)Usart_Used0_Rx_Buff, "L2M", 3) == 0)
+        {
+            sscanf((char *)Usart_Used0_Rx_Buff, "%s %f", tittle, &temp1);
+            Robotic_Arm_Mass_L2 = temp1;
         }
 
         HAL_UARTEx_ReceiveToIdle_DMA(Communication_Usart_Handle_Used0, Usart_Used0_Rx_Buff, Usart_Used0_Rx_Buff_Length);

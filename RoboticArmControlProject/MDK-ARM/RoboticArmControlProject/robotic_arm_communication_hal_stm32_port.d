@@ -34,6 +34,8 @@ roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c_ex.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
@@ -48,3 +50,4 @@ roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticA
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticArmControlSDK/Port/Robotic_Arm_Motor_HAL_STM32_Port.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../Core/Inc/fdcan.h
 roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticArmControlSDK/Core/DMJ4310_Motor_Driver.h
+roboticarmcontrolproject\robotic_arm_communication_hal_stm32_port.o: ../RoboticArmControlSDK/Core/Control_Algorithm.h
