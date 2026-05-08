@@ -3,7 +3,7 @@
 <title>Static Call Graph - [RoboticArmControlProject\RoboticArmControlProject.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image RoboticArmControlProject\RoboticArmControlProject.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu May 07 22:09:43 2026
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Fri May 08 21:17:15 2026
 <BR><P>
 <H3>Maximum Stack Usage =        564 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1059,8 +1059,8 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32h723xx.o(RESET)
 </UL>
-<P><STRONG><a name="[dd]"></a>Communication_Test</STRONG> (Thumb, 96 bytes, Stack size 48 bytes, robotic_arm_communication_hal_stm32_port.o(i.Communication_Test))
-<BR><BR>[Stack]<UL><LI>Max Depth = 140<LI>Call Chain = Communication_Test &rArr; HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
+<P><STRONG><a name="[dd]"></a>Communication_Test</STRONG> (Thumb, 100 bytes, Stack size 56 bytes, robotic_arm_communication_hal_stm32_port.o(i.Communication_Test))
+<BR><BR>[Stack]<UL><LI>Max Depth = 148<LI>Call Chain = Communication_Test &rArr; HAL_UART_Transmit_DMA &rArr; HAL_DMA_Start_IT &rArr; DMA_SetConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[df]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit_DMA
 <LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
@@ -1123,7 +1123,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[17c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Robotic_Arm_Control_Init
 </UL>
 
-<P><STRONG><a name="[e9]"></a>DMJ4310_Motor_Handle_Update</STRONG> (Thumb, 308 bytes, Stack size 152 bytes, robotic_arm_control_api.o(i.DMJ4310_Motor_Handle_Update))
+<P><STRONG><a name="[e9]"></a>DMJ4310_Motor_Handle_Update</STRONG> (Thumb, 358 bytes, Stack size 152 bytes, robotic_arm_control_api.o(i.DMJ4310_Motor_Handle_Update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 300<LI>Call Chain = DMJ4310_Motor_Handle_Update &rArr; DMJ4310_Motor_MIT_Control &rArr; FDCAN_Send_Standard &rArr; HAL_FDCAN_AddMessageToTxFifoQ &rArr; FDCAN_CopyMessageToRAM
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
@@ -1218,7 +1218,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMJ4310_Motor_MIT_Control
 </UL>
 
-<P><STRONG><a name="[f4]"></a>Forearm_Gravity_Compensation</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, control_algorithm.o(i.Forearm_Gravity_Compensation))
+<P><STRONG><a name="[f4]"></a>Forearm_Gravity_Compensation</STRONG> (Thumb, 62 bytes, Stack size 8 bytes, control_algorithm.o(i.Forearm_Gravity_Compensation))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = Forearm_Gravity_Compensation &rArr; __hardfp_cosf &rArr; __mathlib_rredf2
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_cosf
@@ -1978,7 +1978,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Control_Init
 </UL>
 
-<P><STRONG><a name="[163]"></a>LFD01M_Motor_Handle_Update</STRONG> (Thumb, 58 bytes, Stack size 32 bytes, robotic_arm_control_api.o(i.LFD01M_Motor_Handle_Update))
+<P><STRONG><a name="[163]"></a>LFD01M_Motor_Handle_Update</STRONG> (Thumb, 66 bytes, Stack size 32 bytes, robotic_arm_control_api.o(i.LFD01M_Motor_Handle_Update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = LFD01M_Motor_Handle_Update &rArr; LFD01M_Motor_Set_Angle
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
@@ -2003,8 +2003,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[178]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Motor_Control_Init
 </UL>
 
-<P><STRONG><a name="[166]"></a>LK4005_Motor_Handle_Update</STRONG> (Thumb, 378 bytes, Stack size 240 bytes, robotic_arm_control_api.o(i.LK4005_Motor_Handle_Update))
-<BR><BR>[Stack]<UL><LI>Max Depth = 348<LI>Call Chain = LK4005_Motor_Handle_Update &rArr; LK4005_Motor_Torque_Control &rArr; FDCAN_Send_Standard &rArr; HAL_FDCAN_AddMessageToTxFifoQ &rArr; FDCAN_CopyMessageToRAM
+<P><STRONG><a name="[166]"></a>LK4005_Motor_Handle_Update</STRONG> (Thumb, 460 bytes, Stack size 248 bytes, robotic_arm_control_api.o(i.LK4005_Motor_Handle_Update))
+<BR><BR>[Stack]<UL><LI>Max Depth = 356<LI>Call Chain = LK4005_Motor_Handle_Update &rArr; LK4005_Motor_Torque_Control &rArr; FDCAN_Send_Standard &rArr; HAL_FDCAN_AddMessageToTxFifoQ &rArr; FDCAN_CopyMessageToRAM
 </UL>
 <BR>[Calls]<UL><LI><a href="#[e0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[ed]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
@@ -2179,8 +2179,8 @@ Global Symbols
 <P><STRONG><a name="[c]"></a>PendSV_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32h7xx_it.o(i.PendSV_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32h723xx.o(RESET)
 </UL>
-<P><STRONG><a name="[17b]"></a>Robotic_Arm_Control</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, robotic_arm_control_api.o(i.Robotic_Arm_Control))
-<BR><BR>[Stack]<UL><LI>Max Depth = 356<LI>Call Chain = Robotic_Arm_Control &rArr; LK4005_Motor_Handle_Update &rArr; LK4005_Motor_Torque_Control &rArr; FDCAN_Send_Standard &rArr; HAL_FDCAN_AddMessageToTxFifoQ &rArr; FDCAN_CopyMessageToRAM
+<P><STRONG><a name="[17b]"></a>Robotic_Arm_Control</STRONG> (Thumb, 120 bytes, Stack size 16 bytes, robotic_arm_control_api.o(i.Robotic_Arm_Control))
+<BR><BR>[Stack]<UL><LI>Max Depth = 372<LI>Call Chain = Robotic_Arm_Control &rArr; LK4005_Motor_Handle_Update &rArr; LK4005_Motor_Torque_Control &rArr; FDCAN_Send_Standard &rArr; HAL_FDCAN_AddMessageToTxFifoQ &rArr; FDCAN_CopyMessageToRAM
 </UL>
 <BR>[Calls]<UL><LI><a href="#[166]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LK4005_Motor_Handle_Update
 <LI><a href="#[163]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LFD01M_Motor_Handle_Update
@@ -2211,7 +2211,7 @@ Global Symbols
 <P><STRONG><a name="[a]"></a>SVC_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32h7xx_it.o(i.SVC_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32h723xx.o(RESET)
 </UL>
-<P><STRONG><a name="[ea]"></a>Speed_Plan_Update</STRONG> (Thumb, 702 bytes, Stack size 24 bytes, control_algorithm.o(i.Speed_Plan_Update))
+<P><STRONG><a name="[ea]"></a>Speed_Plan_Update</STRONG> (Thumb, 712 bytes, Stack size 24 bytes, control_algorithm.o(i.Speed_Plan_Update))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = Speed_Plan_Update &rArr; __hardfp_powf &rArr; __set_errno
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
@@ -2321,8 +2321,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[f0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DMJ4310_Motor_Response_Data_Explain
 </UL>
 
-<P><STRONG><a name="[ec]"></a>Upperarm_Gravity_Compensation</STRONG> (Thumb, 110 bytes, Stack size 32 bytes, control_algorithm.o(i.Upperarm_Gravity_Compensation))
-<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = Upperarm_Gravity_Compensation &rArr; __hardfp_cosf &rArr; __mathlib_rredf2
+<P><STRONG><a name="[ec]"></a>Upperarm_Gravity_Compensation</STRONG> (Thumb, 118 bytes, Stack size 24 bytes, control_algorithm.o(i.Upperarm_Gravity_Compensation))
+<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = Upperarm_Gravity_Compensation &rArr; __hardfp_cosf &rArr; __mathlib_rredf2
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__hardfp_cosf
 </UL>

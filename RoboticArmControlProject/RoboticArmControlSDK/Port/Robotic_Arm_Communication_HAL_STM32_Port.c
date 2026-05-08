@@ -78,7 +78,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 
 void Communication_Test(void)
 {
-    uint8_t package[36] = {0};
+    uint8_t package[40] = {0};
 
     memcpy(&package[0], &LK4005_Motor_Handle[1].Motor_Position_Target, 4);
     memcpy(&package[4], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Position_Actual, 4);
@@ -88,11 +88,12 @@ void Communication_Test(void)
     memcpy(&package[20], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Position_Target, 4);
     memcpy(&package[24], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Velocity_Target, 4);
     memcpy(&package[28], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Torque_Feedforward, 4);
-    package[32] = 0x00;
-    package[33] = 0x00;
-    package[34] = 0x80;
-    package[35] = 0x7f;
-    HAL_UART_Transmit_DMA(&huart1, package, 36);
+    memcpy(&package[32], &DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.Motor_Torque_Feedforward, 4);
+    package[36] = 0x00;
+    package[37] = 0x00;
+    package[38] = 0x80;
+    package[39] = 0x7f;
+    HAL_UART_Transmit_DMA(&huart1, package, 40);
     HAL_Delay(3);
 }
 
