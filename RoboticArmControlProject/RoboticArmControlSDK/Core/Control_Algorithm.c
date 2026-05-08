@@ -1,7 +1,7 @@
 #include "Control_Algorithm.h"
 
-float Robotic_Arm_Mass_L1 = 0.65f;
-float Robotic_Arm_Mass_L2 = 0.8f;
+float Robotic_Arm_Mass_L1 = 0.6f;
+float Robotic_Arm_Mass_L2 = 0.72f;
 float Robotic_Arm_Mass_End = 0.1f;
 
 // 弧度归一化到0~2pi
