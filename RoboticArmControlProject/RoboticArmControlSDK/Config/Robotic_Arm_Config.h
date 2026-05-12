@@ -82,7 +82,7 @@ typedef struct
 typedef struct
 {
     float Motor_Position_Actual; //范围:0~2pi,单位为rad
-    float Motor_Position_Target; // 范围:0~2pi,单位为rad
+    volatile float Motor_Position_Target; // 范围:0~2pi,单位为rad
 } Motor_Position_PID_Control_Handle_t; //供云台电机使用
 
 typedef struct

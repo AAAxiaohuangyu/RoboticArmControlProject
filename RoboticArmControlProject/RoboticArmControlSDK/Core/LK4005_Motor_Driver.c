@@ -2,6 +2,7 @@
 #include "Control_Algorithm.h"
 
 LK4005_Motor_Handle_t LK4005_Motor_Handle[LK4005_Motor_Number] = {0};
+int32_t Position_Temp = 0;
 
 void LK4005_Motor_Control_Init(void)
 {
@@ -17,7 +18,7 @@ void LK4005_Motor_Control_Init(void)
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].MIT_Kp = 100.5f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kp = 105.0f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].MIT_Kd = 3.95f;
-    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kd = 1.27f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kd = 1.2f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Torque_Friction = 0.11f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].Motor_Torque_Friction = 0.02f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Output = 0.0f;
@@ -61,7 +62,7 @@ void LK4005_Motor_Torque_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle, Moto
 void LK4005_Motor_Position_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle)
 {
     uint8_t FDCAN_Send_Temp[LK4005_Motor_FDCAN_Length] = {0};
-    int32_t Position_Temp = (int32_t)(Normalize_Angle(LK4005_Motor_Handle.Motor_Position_PID_Control_Handle.Motor_Position_Target + Angle_Gimbal_Offset) * 180.0f / PI * 100.0f);
+    Position_Temp = (int32_t)(Normalize_Angle(LK4005_Motor_Handle.Motor_Position_PID_Control_Handle.Motor_Position_Target + Angle_Gimbal_Offset) * 180.0f / PI * 100.0f);
     FDCAN_Send_Temp[0] = 0xA3;
     FDCAN_Send_Temp[4] = (uint8_t)(Position_Temp & 0xFF);
     FDCAN_Send_Temp[5] = (uint8_t)((Position_Temp >> 8 * 1) & 0xFF);

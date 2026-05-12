@@ -36,21 +36,15 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 
 void Communication_Test(void)
 {
-    uint8_t package[40] = {0};
+    uint8_t package[16] = {0};
 
-    memcpy(&package[0], &LK4005_Motor_Handle[1].Motor_Position_Target, 4);
-    memcpy(&package[4], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Position_Actual, 4);
-    memcpy(&package[8], &DMJ4310_Motor_Handle[0].Motor_Position_Target, 4);
-    memcpy(&package[12], &DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.Motor_Position_Actual, 4);
-    memcpy(&package[16], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Output, 4);
-    memcpy(&package[20], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Position_Target, 4);
-    memcpy(&package[24], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Velocity_Target, 4);
-    memcpy(&package[28], &LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Torque_Feedforward, 4);
-    memcpy(&package[32], &DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.Motor_Torque_Feedforward, 4);
-    package[36] = 0x00;
-    package[37] = 0x00;
-    package[38] = 0x80;
-    package[39] = 0x7f;
-    HAL_UART_Transmit_DMA(&huart1, package, 40);
+    memcpy(&package[0], &LK4005_Motor_Handle[0].Motor_Position_Target, 4);
+    memcpy(&package[4], &LK4005_Motor_Handle[0].Motor_Position_PID_Control_Handle.Motor_Position_Actual, 4);
+    memcpy(&package[8], &Position_Temp, 4);
+    package[12] = 0x00;
+    package[13] = 0x00;
+    package[14] = 0x80;
+    package[15] = 0x7f;
+    HAL_UART_Transmit_DMA(&huart1, package, 16);
     HAL_Delay(3);
 }

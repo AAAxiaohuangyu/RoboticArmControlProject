@@ -175,7 +175,7 @@ void Coordinate_Inverse_Settlement(float X, float Y, float Z, float *Gimbal_Angl
 {
     if (fabsf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2)) < 1.0f && fabsf(Robotic_Arm_Length_L2 * sinf(acosf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2))) / sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) < 1.0f)
     {
-        *Gimbal_Angle = Normalize_Angle((PI / 2.0f) + atan2f(Y, X));
+        *Gimbal_Angle = Normalize_Angle((PI / 2.0f) + atan2f(Y, X) + 1.571f);
         float temp = acosf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2));
         *Joint_Upper_Angle = -Normalize_Angle(asinf(Robotic_Arm_Length_L2 * sinf(temp) / sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) + atan2f(Z - Robotic_Arm_Length_Connect, sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) + Angle_Joint_Upper_Offset);
         *Joint_Fore_Angle = Normalize_Angle(temp + Angle_Joint_Fore_Offset);
