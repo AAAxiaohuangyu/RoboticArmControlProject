@@ -41,3 +41,7 @@ roboticarmcontrolproject\control_algorithm.o: ../Drivers/STM32H7xx_HAL_Driver/In
 roboticarmcontrolproject\control_algorithm.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h
 roboticarmcontrolproject\control_algorithm.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 roboticarmcontrolproject\control_algorithm.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
+roboticarmcontrolproject\control_algorithm.o: ..\RoboticArmControlSDK\Core\DMJ4310_Motor_Driver.h
+roboticarmcontrolproject\control_algorithm.o: ../RoboticArmControlSDK/Port/Robotic_Arm_Motor_HAL_STM32_Port.h
+roboticarmcontrolproject\control_algorithm.o: ../Core/Inc/fdcan.h
+roboticarmcontrolproject\control_algorithm.o: ..\RoboticArmControlSDK\Core\LK4005_Motor_Driver.h

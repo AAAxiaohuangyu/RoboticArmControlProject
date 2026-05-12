@@ -1,8 +1,6 @@
 #include "Control_Algorithm.h"
-
-float Robotic_Arm_Mass_L1 = 0.6f;
-float Robotic_Arm_Mass_L2 = 0.72f;
-float Robotic_Arm_Mass_End = 0.1f;
+#include "DMJ4310_Motor_Driver.h"
+#include "LK4005_Motor_Driver.h"
 
 // 弧度归一化到0~2pi
 float Normalize_Angle(float Angle)
@@ -28,16 +26,6 @@ void Motor_MIT_Control(Motor_MIT_Control_Handle_t *Motor_MIT_Control_Handle)
     }
 }
 
-float Upperarm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle)
-{
-    return ((Robotic_Arm_Mass_L1 * Robotic_Arm_Length_L1 * 0.5f + Robotic_Arm_Mass_Forearm_Motor * Robotic_Arm_Length_L1) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle) + (Robotic_Arm_Mass_L2 * (Robotic_Arm_Length_L2 * 0.5f) + Robotic_Arm_Mass_End * Robotic_Arm_Length_L2) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle + Forearm_Motor_Angle));
-}
-
-float Forearm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle)
-{
-    return (Robotic_Arm_Mass_L2 * Robotic_Arm_Length_L2 * 0.5f + Robotic_Arm_Mass_End * Robotic_Arm_Length_L2) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle + Forearm_Motor_Angle);
-}
-
 void Speed_Plan_Update(Speed_Plan_Handle_t *Speed_Plan_Handle, float position_actual, float position_target)
 {
     uint32_t Current_Time = HAL_GetTick();
@@ -56,12 +44,6 @@ void Speed_Plan_Update(Speed_Plan_Handle_t *Speed_Plan_Handle, float position_ac
     {
         Speed_Plan_Handle->error_s = position_target - position_actual;
         Speed_Plan_Handle->position_initial = position_actual;
-
-        if (fabsf(Speed_Plan_Handle->error_s) <= Speed_Plan_Handle->Threshold_S)
-        {
-            Speed_Plan_Handle->Speed_Plan_State = idle;
-            break;
-        }
 
         if (Speed_Plan_Handle->error_s >= 0.0f)
         {
@@ -174,4 +156,28 @@ void Speed_Plan_Update(Speed_Plan_Handle_t *Speed_Plan_Handle, float position_ac
         Speed_Plan_Handle->Speed_Plan_State = idle;
     }
     Speed_Plan_Handle->Time_Stamp = HAL_GetTick();
+}
+
+float Upperarm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle)
+{
+    return ((Robotic_Arm_Mass_L1 * Robotic_Arm_Length_L1 * 0.5f + Robotic_Arm_Mass_Forearm_Motor * Robotic_Arm_Length_L1) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle) + (Robotic_Arm_Mass_L2 * (Robotic_Arm_Length_L2 * 0.5f) + Robotic_Arm_Mass_End * Robotic_Arm_Length_L2) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle + Forearm_Motor_Angle));
+}
+
+float Forearm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Motor_Angle)
+{
+    return (Robotic_Arm_Mass_L2 * Robotic_Arm_Length_L2 * 0.5f + Robotic_Arm_Mass_End * Robotic_Arm_Length_L2) * g * cosf(Robotic_Arm_Angle_Offset + Upperarm_Motor_Angle + Forearm_Motor_Angle);
+}
+
+/*
+单位统一为国际单位制
+*/
+void Coordinate_Inverse_Settlement(float X, float Y, float Z, float *Gimbal_Angle, float *Joint_Upper_Angle, float *Joint_Fore_Angle)
+{
+    if (fabsf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2)) < 1.0f && fabsf(Robotic_Arm_Length_L2 * sinf(acosf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2))) / sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) < 1.0f)
+    {
+        *Gimbal_Angle = Normalize_Angle((PI / 2.0f) + atan2f(Y, X));
+        float temp = acosf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2));
+        *Joint_Upper_Angle = -Normalize_Angle(asinf(Robotic_Arm_Length_L2 * sinf(temp) / sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) + atan2f(Z - Robotic_Arm_Length_Connect, sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) + Angle_Joint_Upper_Offset);
+        *Joint_Fore_Angle = Normalize_Angle(temp + Angle_Joint_Fore_Offset);
+    }
 }

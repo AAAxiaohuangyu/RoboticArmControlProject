@@ -10,24 +10,21 @@ void LK4005_Motor_Control_Init(void)
     LK4005_Motor_Handle[0].Motor_Type = Gimbal;
     LK4005_Motor_Handle[0].Motor_Position_Target = 3.14f;
 
-
     LK4005_Motor_Handle[1].Motor_FDCAN_Handle = &hfdcan2;
     LK4005_Motor_Handle[1].Motor_ID = 0x149;
     LK4005_Motor_Handle[1].Motor_Type = Joint_Fore;
     LK4005_Motor_Handle[1].Motor_Position_Target = 1.57f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].MIT_Kp = 100.5f;
-    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kp = 82.5f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kp = 105.0f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].MIT_Kd = 3.95f;
-    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kd = 4.15f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kd = 1.27f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Torque_Friction = 0.11f;
-    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].Motor_Torque_Friction = 0.11f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].Motor_Torque_Friction = 0.02f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Output = 0.0f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].Output = 0.0f;
-    LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
     LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.j = 15.5f;
     LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.a_max = 1.5f;
     LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.v_max = 0.45f;
-    LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Threshold_S = 0.0f; 
 
     FDCAN_FilterTypeDef sfilter = {0};
     sfilter.IdType = FDCAN_STANDARD_ID;
@@ -97,7 +94,7 @@ void LK4005_Motor_Response_Data_Explain(FDCAN_HandleTypeDef *hfdcan, FDCAN_RxHea
             {
                 LK4005_Motor_Handle->Motor_MIT_Control_Handle[0].Motor_Position_Actual = ((float)(((uint32_t)FDCAN_Rx_Data_Temp[7] << 24) | ((uint32_t)FDCAN_Rx_Data_Temp[6] << 16) | ((uint32_t)FDCAN_Rx_Data_Temp[5] << 8) | ((uint32_t)FDCAN_Rx_Data_Temp[4])) * Position_Conversion_Ratio / Reduction_Ratio) * PI / 180.0f;
 
-                if(LK4005_Motor_Handle->Motor_Type == Gimbal)
+                if (LK4005_Motor_Handle->Motor_Type == Gimbal)
                 {
                     LK4005_Motor_Handle->Motor_MIT_Control_Handle[0].Motor_Position_Actual = Normalize_Angle(LK4005_Motor_Handle->Motor_MIT_Control_Handle[0].Motor_Position_Actual - Angle_Gimbal_Offset);
                 }

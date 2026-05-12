@@ -8,14 +8,13 @@ void DMJ4310_Motor_Control_Init(void)
     DMJ4310_Motor_Handle[0].Motor_FDCAN_Handle = &hfdcan2;
     DMJ4310_Motor_Handle[0].Motor_ID = 1;
     DMJ4310_Motor_Handle[0].Motor_Type = Joint_Upper;
-    DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.MIT_Kp = 48.8f;
-    DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.MIT_Kd = 1.18f;
+    DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.MIT_Kp = 62.8f;
+    DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.MIT_Kd = 1.3f;
     DMJ4310_Motor_Handle[0].Motor_Position_Target = -0.785f;
     DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
     DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.j = 15.5f;
     DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.a_max = 1.5f;
     DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.v_max = 0.45f;
-    DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Threshold_S = 0.1f;
 
     FDCAN_FilterTypeDef sfilter = {0};
     sfilter.IdType = FDCAN_STANDARD_ID;

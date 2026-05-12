@@ -7,7 +7,7 @@ static uint8_t Joint_Fore_Start_Complete = 0;
 void LFD01M_Motor_Handle_Update(void)
 {
     uint8_t i = 0;
-    if (Joint_Fore_Start_Complete)
+    if (Gimbal_Start_Complete)
     {
         for (i = 0; i < LFD01M_Motor_Number; i++)
         {
@@ -159,19 +159,6 @@ void Robotic_Arm_Control_Init(void)
 
 void Robotic_Arm_Control(void)
 {
-    if (Gimbal_Start_Complete == 0)
-    {
-        if(DMJ4310_Motor_Handle[0].Wait_Count == 19)
-        {
-            DMJ4310_Motor_Handle[0].Motor_Position_Target = DMJ4310_Motor_Handle[0].Motor_MIT_Control_Handle.Motor_Position_Actual;
-        }
-    }
-    else if (Gimbal_Start_Complete == 1)
-    {
-        DMJ4310_Motor_Handle[0].Motor_Position_Target = -0.785f;
-        DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
-        Gimbal_Start_Complete = 2;
-    }
     if (Joint_Upper_Start_Complete == 0)
     {
         if(LK4005_Motor_Handle[1].Wait_Count == 19)
@@ -185,12 +172,19 @@ void Robotic_Arm_Control(void)
         LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
         Joint_Upper_Start_Complete = 2;
     }
+    if(Joint_Fore_Start_Complete == 0)
+    {
+        if (LK4005_Motor_Handle[0].Wait_Count == 19)
+        {
+            LK4005_Motor_Handle[0].Motor_Position_Target = LK4005_Motor_Handle[0].Motor_Position_PID_Control_Handle.Motor_Position_Actual;
+        }
+    }
+    else if (Joint_Fore_Start_Complete == 1)
+    {
+        LK4005_Motor_Handle[0].Motor_Position_Target = 3.14f;
+        Joint_Fore_Start_Complete = 2;
+    }
     LFD01M_Motor_Handle_Update();
     DMJ4310_Motor_Handle_Update();
     LK4005_Motor_Handle_Update();
-}
-
-void Robotic_Arm_Communication(void)
-{
-    Communication_Usart_Used0();
 }

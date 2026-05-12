@@ -13,7 +13,6 @@ extern uint8_t Usart_Used0_Rx_Buff[];
 #define Usart_Used0_Transmit_Cycle 20
 
 void Communication_Usart_Init(void);
-void Communication_Usart_Used0(void);
 void Communication_Test(void);
 
 #endif

@@ -168,6 +168,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>Robotic_Arm_Mass_L2</ItemText>
         </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>Usart_Used0_Rx_Buff</ItemText>
+        </Ww>
       </WatchWindow1>
       <Tracepoint>
         <THDelay>0</THDelay>

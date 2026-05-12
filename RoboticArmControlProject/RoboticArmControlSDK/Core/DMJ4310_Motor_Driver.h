@@ -24,6 +24,7 @@
 #define DMJ4310_Motor_Torque_Length 12 // 单位为位
 #define DMJ4310_Motor_FDCAN_Response_ID 2
 #define DMJ4310_Motor_Control_Cycle 1
+#define Angle_Joint_Upper_Offset 0.07f
 
 extern DMJ4310_Motor_Handle_t DMJ4310_Motor_Handle[];
 
