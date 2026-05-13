@@ -18,7 +18,7 @@ void LK4005_Motor_Control_Init(void)
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].MIT_Kp = 100.5f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kp = 105.0f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].MIT_Kd = 3.95f;
-    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kd = 1.2f;
+    LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].MIT_Kd = 1.255f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Motor_Torque_Friction = 0.11f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[1].Motor_Torque_Friction = 0.02f;
     LK4005_Motor_Handle[1].Motor_MIT_Control_Handle[0].Output = 0.0f;

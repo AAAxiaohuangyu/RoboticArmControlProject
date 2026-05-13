@@ -171,13 +171,15 @@ float Forearm_Gravity_Compensation(float Upperarm_Motor_Angle, float Forearm_Mot
 /*
 单位统一为国际单位制
 */
-void Coordinate_Inverse_Settlement(float X, float Y, float Z, float *Gimbal_Angle, float *Joint_Upper_Angle, float *Joint_Fore_Angle)
+void Coordinate_Inverse_Settlement(float X, float Y, float Z, float Servo_Angle,float *Gimbal_Angle, float *Joint_Upper_Angle, float *Joint_Fore_Angle)
 {
     if (fabsf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2)) < 1.0f && fabsf(Robotic_Arm_Length_L2 * sinf(acosf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2))) / sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) < 1.0f)
     {
         *Gimbal_Angle = Normalize_Angle((PI / 2.0f) + atan2f(Y, X) + 1.571f);
-        float temp = acosf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * Robotic_Arm_Length_L2));
-        *Joint_Upper_Angle = -Normalize_Angle(asinf(Robotic_Arm_Length_L2 * sinf(temp) / sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) + atan2f(Z - Robotic_Arm_Length_Connect, sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) + Angle_Joint_Upper_Offset);
-        *Joint_Fore_Angle = Normalize_Angle(temp + Angle_Joint_Fore_Offset);
+        float L2_Length_Virtual = sqrtf(Robotic_Arm_Length_L2 * Robotic_Arm_Length_L2 + Robotic_Arm_Length_End * Robotic_Arm_Length_End - 2.0f * Robotic_Arm_Length_End * Robotic_Arm_Length_L2 * cosf(PI / 2.0f + Servo_Angle));
+        float L2_Angle_Virtual = asinf(Robotic_Arm_Length_End * sinf(PI / 2.0f + Servo_Angle) / L2_Length_Virtual);
+        float temp = acosf((Robotic_Arm_Length_L1 * Robotic_Arm_Length_L1 + L2_Length_Virtual * L2_Length_Virtual - X * X - Y * Y - (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect)) / (2.0f * Robotic_Arm_Length_L1 * L2_Length_Virtual));
+        *Joint_Upper_Angle = -Normalize_Angle(asinf(L2_Length_Virtual * sinf(temp) / sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) + atan2f(Z - Robotic_Arm_Length_Connect, sqrtf(X * X + Y * Y + (Z - Robotic_Arm_Length_Connect) * (Z - Robotic_Arm_Length_Connect))) + Angle_Joint_Upper_Offset);
+        *Joint_Fore_Angle = Normalize_Angle(temp + Angle_Joint_Fore_Offset - L2_Angle_Virtual);
     }
 }

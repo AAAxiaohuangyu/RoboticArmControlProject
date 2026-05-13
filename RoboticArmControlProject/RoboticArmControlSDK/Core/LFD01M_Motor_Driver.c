@@ -6,11 +6,11 @@ void LFD01M_Motor_Control_Init(void)
 {
     LFD01M_Motor_Handle[0].Motor_PWM_Timer = &htim1;
     LFD01M_Motor_Handle[0].Motor_PWM_Channel = TIM_CHANNEL_3;
-    LFD01M_Motor_Handle[0].Motor_Type = Servo;//下方的舵机
+    LFD01M_Motor_Handle[0].Motor_Type = Servo;//上方的舵机与摄像头直接相连
     LFD01M_Motor_Handle[0].Motor_Position = 1.57f;
     LFD01M_Motor_Handle[1].Motor_PWM_Timer = &htim2;
     LFD01M_Motor_Handle[1].Motor_PWM_Channel = TIM_CHANNEL_3;
-    LFD01M_Motor_Handle[1].Motor_Type = Servo;//上方的与摄像头相连的舵机
+    LFD01M_Motor_Handle[1].Motor_Type = Servo;//下方的舵机
     LFD01M_Motor_Handle[1].Motor_Position = 1.57f;
 
     HAL_TIM_PWM_Start(LFD01M_Motor_Handle[0].Motor_PWM_Timer, LFD01M_Motor_Handle[0].Motor_PWM_Channel);

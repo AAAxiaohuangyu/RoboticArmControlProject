@@ -20,16 +20,40 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
         float X_Temp = ((float)(int16_t)((Usart_Used0_Rx_Buff[1] << 8) | Usart_Used0_Rx_Buff[0])) / 100.0f;
         float Y_Temp = ((float)(int16_t)((Usart_Used0_Rx_Buff[3] << 8) | Usart_Used0_Rx_Buff[2])) / 100.0f;
         float Z_Temp = ((float)(int16_t)((Usart_Used0_Rx_Buff[5] << 8) | Usart_Used0_Rx_Buff[4])) / 100.0f;
-        float Servo1_Temp = (float)(int16_t)((Usart_Used0_Rx_Buff[7] << 8) | Usart_Used0_Rx_Buff[6]) / 180.0f * PI;
-        float Servo2_Temp = (float)(int16_t)((Usart_Used0_Rx_Buff[9] << 8) | Usart_Used0_Rx_Buff[8]) / 180.0f * PI;
-        Coordinate_Inverse_Settlement(X_Temp,Y_Temp,Z_Temp,&LK4005_Motor_Handle[0].Motor_Position_Target,&DMJ4310_Motor_Handle[0].Motor_Position_Target,&LK4005_Motor_Handle[1].Motor_Position_Target);
-        if (DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State == idle && LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State == idle)
+        float Servo1_Temp = (float)(int16_t)((Usart_Used0_Rx_Buff[7] << 8) | Usart_Used0_Rx_Buff[6]) / 180.0f * PI;//与摄像头相连的舵机
+        float Servo2_Temp = (float)(int16_t)((Usart_Used0_Rx_Buff[9] << 8) | Usart_Used0_Rx_Buff[8]) / 180.0f * PI;//与小臂相连的舵机
+
+        X_Temp -= cosf(PI / 2.0f - Servo2_Temp) * Robotic_Arm_Length_End * cosf(atan2f(Y_Temp, X_Temp));
+        Y_Temp -= cosf(PI / 2.0f - Servo2_Temp) * Robotic_Arm_Length_End * sinf(atan2f(Y_Temp, X_Temp));
+
+        if (PI - Servo1_Temp >= 0.0f && PI - Servo1_Temp <= PI && Servo2_Temp - (PI / 2.0f) + Angle_Servo_Offset >= 0.0f && Servo2_Temp - (PI / 2.0f) + Angle_Servo_Offset <= PI && DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State == idle && LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State == idle)
         {
+            Coordinate_Inverse_Settlement(X_Temp, Y_Temp, Z_Temp, Servo2_Temp, &LK4005_Motor_Handle[0].Motor_Position_Target, &DMJ4310_Motor_Handle[0].Motor_Position_Target, &LK4005_Motor_Handle[1].Motor_Position_Target);
+
             DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
             LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
+            
+            LFD01M_Motor_Handle[0].Motor_Position = PI - Servo1_Temp;
+            LFD01M_Motor_Handle[1].Motor_Position = Servo2_Temp - (PI / 2.0f) + Angle_Servo_Offset;
         }
-        LFD01M_Motor_Handle[0].Motor_Position = Servo1_Temp;
-        LFD01M_Motor_Handle[1].Motor_Position = Servo2_Temp;
+        /*Usart_Used0_Rx_Buff[Size] = '\0';
+        if (strncmp((char *)Usart_Used0_Rx_Buff, "LFD", 3) == 0)
+        {
+            char tittle[8] = {0};
+            int subtittle = 0;
+            float temp1 = 0;
+
+            sscanf((char *)Usart_Used0_Rx_Buff, "%s %d %f", tittle, &subtittle, &temp1);
+
+            if (subtittle == 0)
+            {
+                LFD01M_Motor_Handle[0].Motor_Position = temp1;
+            }
+            else if (subtittle == 1)
+            {
+                LFD01M_Motor_Handle[1].Motor_Position = temp1;
+            }
+        }*/
         HAL_UARTEx_ReceiveToIdle_DMA(Communication_Usart_Handle_Used0, Usart_Used0_Rx_Buff, Usart_Used0_Rx_Buff_Length);
     }
 }

@@ -130,6 +130,7 @@ typedef struct
 #define Robotic_Arm_Mass_Forearm_Motor 0.154f // 小臂电机的质量,单位为kg
 #define Robotic_Arm_Mass_End 0.13f           // 末端舵机,摄像头等的总质量,单位为kg
 #define Robotic_Arm_Angle_Offset 1.571f //整体机械臂(云台)相对于地面的夹角,单位为rad 
+#define Robotic_Arm_Length_End 0.08245f
 #define g 9.7913f
 
 #endif

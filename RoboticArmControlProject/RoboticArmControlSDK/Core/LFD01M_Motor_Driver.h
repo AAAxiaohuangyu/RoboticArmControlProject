@@ -7,6 +7,7 @@
 #define LFD01M_Motor_PWM_CCR_Max 2500
 #define LFD01M_Motor_PWM_CCR_Min 500
 #define LFD01M_Motor_Control_Cycle 1
+#define Angle_Servo_Offset 0.4f
 
 extern LFD01M_Motor_Handle_t LFD01M_Motor_Handle[];
 

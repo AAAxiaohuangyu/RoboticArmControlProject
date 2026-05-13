@@ -1,6 +1,6 @@
 #include "Robotic_Arm_Control_API.h"
 
-static uint8_t Gimbal_Start_Complete = 0;
+static uint8_t Gimbal_Start_Complete = 1;
 static uint8_t Joint_Upper_Start_Complete = 0;
 static uint8_t Joint_Fore_Start_Complete = 0;
 
@@ -133,7 +133,7 @@ void LK4005_Motor_Handle_Update(void)
             if (LK4005_Motor_Handle[i].Motor_Type == Gimbal)
             {
                 LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
-                LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
+                //LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
                 if (fabsf(LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Actual - LK4005_Motor_Handle[i].Motor_Position_Target) <= 0.1f && Gimbal_Start_Complete == 0 && Joint_Fore_Start_Complete == 2)
                 {
                     Gimbal_Start_Complete = 1;
