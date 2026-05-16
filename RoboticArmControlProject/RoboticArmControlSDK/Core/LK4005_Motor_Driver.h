@@ -15,7 +15,6 @@
 #define LK4005_Motor_Control_Cycle 1 //控制周期(不计算等待FDCAN的4ms),单位为ms
 
 extern LK4005_Motor_Handle_t LK4005_Motor_Handle[];
-extern int32_t Position_Temp;
 
 void LK4005_Motor_Control_Init(void);
 void LK4005_Motor_Torque_Control(LK4005_Motor_Handle_t LK4005_Motor_Handle, Motor_MIT_Control_Handle_t Motor_MIT_Control_Handle);

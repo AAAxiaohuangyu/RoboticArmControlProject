@@ -1,8 +1,9 @@
 #include "Robotic_Arm_Control_API.h"
 
-static uint8_t Gimbal_Start_Complete = 1;
+static uint8_t Gimbal_Start_Complete = 0;
 static uint8_t Joint_Upper_Start_Complete = 0;
 static uint8_t Joint_Fore_Start_Complete = 0;
+static uint8_t Gimbal_Flag = 0;
 
 void LFD01M_Motor_Handle_Update(void)
 {
@@ -132,8 +133,19 @@ void LK4005_Motor_Handle_Update(void)
 
             if (LK4005_Motor_Handle[i].Motor_Type == Gimbal)
             {
-                LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
-                //LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
+
+                Speed_Plan_Update(&LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle, LK4005_Motor_Handle[i].Motor_MIT_Control_Handle[0].Motor_Position_Actual, LK4005_Motor_Handle[i].Motor_Position_Target);
+
+                if (LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.Speed_Plan_State != idle)
+                {
+                    LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.position_initial + LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.direction_flag * LK4005_Motor_Handle[i].Motor_Speed_Plan_Handle.s;
+
+                }
+                else
+                {
+                    LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Target = LK4005_Motor_Handle[i].Motor_Position_Target;
+                }
+                LK4005_Motor_Position_Control(LK4005_Motor_Handle[i]);
                 if (fabsf(LK4005_Motor_Handle[i].Motor_Position_PID_Control_Handle.Motor_Position_Actual - LK4005_Motor_Handle[i].Motor_Position_Target) <= 0.1f && Gimbal_Start_Complete == 0 && Joint_Fore_Start_Complete == 2)
                 {
                     Gimbal_Start_Complete = 1;
@@ -174,14 +186,16 @@ void Robotic_Arm_Control(void)
     }
     if(Joint_Fore_Start_Complete == 0)
     {
-        if (LK4005_Motor_Handle[0].Wait_Count == 19)
+        if (LK4005_Motor_Handle[0].Wait_Count >= 15 && LK4005_Motor_Handle[0].Wait_Count <= 19 && Gimbal_Flag == 0)
         {
             LK4005_Motor_Handle[0].Motor_Position_Target = LK4005_Motor_Handle[0].Motor_Position_PID_Control_Handle.Motor_Position_Actual;
+            Gimbal_Flag = 1;
         }
     }
     else if (Joint_Fore_Start_Complete == 1)
     {
-        LK4005_Motor_Handle[0].Motor_Position_Target = 3.14f;
+        LK4005_Motor_Handle[0].Motor_Position_Target = 3.14f + floorf(LK4005_Motor_Handle[0].Motor_Position_PID_Control_Handle.Motor_Position_Actual / (2.0f * PI)) * 2.0f * PI;
+        LK4005_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
         Joint_Fore_Start_Complete = 2;
     }
     LFD01M_Motor_Handle_Update();

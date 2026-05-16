@@ -26,13 +26,14 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
         X_Temp -= cosf(PI / 2.0f - Servo2_Temp) * Robotic_Arm_Length_End * cosf(atan2f(Y_Temp, X_Temp));
         Y_Temp -= cosf(PI / 2.0f - Servo2_Temp) * Robotic_Arm_Length_End * sinf(atan2f(Y_Temp, X_Temp));
 
-        if (PI - Servo1_Temp >= 0.0f && PI - Servo1_Temp <= PI && Servo2_Temp - (PI / 2.0f) + Angle_Servo_Offset >= 0.0f && Servo2_Temp - (PI / 2.0f) + Angle_Servo_Offset <= PI && DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State == idle && LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State == idle)
+        if (PI - Servo1_Temp >= 0.0f && PI - Servo1_Temp <= PI &&Servo2_Temp - (PI / 2.0f) + Angle_Servo_Offset >= 0.0f && Servo2_Temp - (PI / 2.0f) + Angle_Servo_Offset <= PI && DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State == idle && LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State == idle && LK4005_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State == idle)
         {
             Coordinate_Inverse_Settlement(X_Temp, Y_Temp, Z_Temp, Servo2_Temp, &LK4005_Motor_Handle[0].Motor_Position_Target, &DMJ4310_Motor_Handle[0].Motor_Position_Target, &LK4005_Motor_Handle[1].Motor_Position_Target);
 
             DMJ4310_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
             LK4005_Motor_Handle[1].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
-            
+            LK4005_Motor_Handle[0].Motor_Speed_Plan_Handle.Speed_Plan_State = init;
+
             LFD01M_Motor_Handle[0].Motor_Position = PI - Servo1_Temp;
             LFD01M_Motor_Handle[1].Motor_Position = Servo2_Temp - (PI / 2.0f) + Angle_Servo_Offset;
         }
@@ -64,7 +65,6 @@ void Communication_Test(void)
 
     memcpy(&package[0], &LK4005_Motor_Handle[0].Motor_Position_Target, 4);
     memcpy(&package[4], &LK4005_Motor_Handle[0].Motor_Position_PID_Control_Handle.Motor_Position_Actual, 4);
-    memcpy(&package[8], &Position_Temp, 4);
     package[12] = 0x00;
     package[13] = 0x00;
     package[14] = 0x80;
