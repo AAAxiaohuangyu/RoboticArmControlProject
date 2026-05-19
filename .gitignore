@@ -30,3 +30,8 @@
 # OS
 .DS_Store
 Thumbs.db
+
+# Remote original ignores
+DM-J4310-2EC-master/
+dm-mc02-master/
+LFD-01M舵机/
