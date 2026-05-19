@@ -1,0 +1,32 @@
+# Build artifacts
+*.o
+*.out
+*.elf
+*.bin
+*.hex
+*.axf
+*.map
+*.crf
+*.d
+*.dep
+*.lnp
+*.sct
+*.lst
+*.iex
+
+# Keil MDK
+*.uvguix.*
+*.uvoptx
+*.uvprojx.user
+*.build_log.htm
+
+# IDE
+.vscode/
+.idea/
+
+# CubeMX
+.mxproject
+
+# OS
+.DS_Store
+Thumbs.db
